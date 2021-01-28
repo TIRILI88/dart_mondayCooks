@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dish_container.dart';
 import 'scroll_container.dart';
+import 'recipe_page.dart';
 
 class StartPage extends StatefulWidget {
   @override
@@ -10,6 +11,17 @@ class StartPage extends StatefulWidget {
 
 class _StartPageState extends State<StartPage> {
 
+  int _selectedIndex = 0;
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => RecipePage())
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,25 +128,25 @@ class _StartPageState extends State<StartPage> {
               canvasColor: Color(0xFF212121)
           ),
           child: BottomNavigationBar(
-            fixedColor: Colors.white,
             items: [
-              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.home,
-              color: Colors.white,),
+              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.home),
               label: 'Home',
               ),
               BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.lemon),
                   label: 'Recipes'
               ),
-              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.pepperHot),
-                  label: 'Pepper'
+              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.star),
+                  label: 'Favorites'
               ),
               BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.userCircle),
-                  label: 'My Account'
+                  label: 'User'
               ),
             ],
+            currentIndex: _selectedIndex,
+              selectedItemColor: Colors.white,
+            onTap: _onItemTapped,
           ),
         ));
   }
-
 }
 
