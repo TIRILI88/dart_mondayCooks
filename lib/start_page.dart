@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dish_container.dart';
 import 'scroll_container.dart';
 
@@ -108,9 +107,33 @@ class _StartPageState extends State<StartPage> {
                       ),
                     )
                   //
-                )
-    ]),
-        ]));
+                ),
+              ],
+            ),
+        ]),
+        bottomNavigationBar: Theme(
+          data: Theme.of(context).copyWith(
+              canvasColor: Color(0xFF212121)
+          ),
+          child: BottomNavigationBar(
+            fixedColor: Colors.white,
+            items: [
+              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.home,
+              color: Colors.white,),
+              label: 'Home',
+              ),
+              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.lemon),
+                  label: 'Recipes'
+              ),
+              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.pepperHot),
+                  label: 'Pepper'
+              ),
+              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.userCircle),
+                  label: 'My Account'
+              ),
+            ],
+          ),
+        ));
   }
 
 }
