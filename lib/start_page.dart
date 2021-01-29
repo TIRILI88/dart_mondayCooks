@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dish_container.dart';
 import 'scroll_container.dart';
 import 'recipe_page.dart';
+import 'constants.dart';
 
 class StartPage extends StatefulWidget {
   @override
@@ -52,6 +53,10 @@ class _StartPageState extends State<StartPage> {
                             color: Colors.white,
                             // fontWeight: FontWeight.bold
                         ),),
+                      SizedBox(height: 20),
+                      Divider(
+                          color: kColorContainer
+                      )
                     ],
                   ),
                 ),
