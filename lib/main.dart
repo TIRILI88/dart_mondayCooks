@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'start_page.dart';
+import 'package:monday_cooks/recipe_page.dart';
+import 'package:monday_cooks/start_page.dart';
+
 
 void main() {
   runApp(MondayCooks());
@@ -14,7 +16,15 @@ class MondayCooks extends StatelessWidget {
         primaryColor: Color(0xFF212121),
         scaffoldBackgroundColor: Color(0xFF212121),
       ),
-      home: StartPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => StartPage(),
+        '/recipePage': (context) => RecipePage(
+            recipeTitle: 'recipeTitle',
+            recipeImagePath: 'images/default_recipe.jpeg',
+            recipeDuration: 0),
+      },
+      // onGenerateRoute: RouteGenerator.generateRoute
     );
   }
 }

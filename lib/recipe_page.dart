@@ -4,11 +4,17 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 
 class RecipePage extends StatelessWidget {
+  RecipePage({@required this.recipeTitle, @required  this.recipeImagePath,@required  this.recipeDuration});
+  
+  final String recipeTitle;
+  final String recipeImagePath;
+  final int recipeDuration;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pumpkin Soup'),
+        title: Text(recipeTitle),
         actions: [
           Icon(FontAwesomeIcons.star)
         ],
@@ -17,13 +23,18 @@ class RecipePage extends StatelessWidget {
         children: [
           // SizedBox(height: 50),
           Expanded(
-            child: Container(
-              height: 300,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    fit: BoxFit.cover, image: AssetImage('images/pumpkin_soup.jpeg')),
-                color: Colors.orange,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+            child: Flexible(
+              child: Hero(
+                tag: 'recipeImage',
+                child: Container(
+                  height: 300,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.cover, image: AssetImage(recipeImagePath)),
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                ),
               ),
             ),
           ),
@@ -54,7 +65,7 @@ class RecipePage extends StatelessWidget {
                         color: Colors.orangeAccent,
                         borderRadius: BorderRadius.circular(10)
                     ),
-                    child: Text('45 MIN',
+                    child: Text('${recipeDuration} MIN',
                         style: TextStyle(
                             color: Color(0xFF212121),
                             fontSize: 20,

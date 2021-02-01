@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dish_container.dart';
 import 'scroll_container.dart';
-import 'recipe_page.dart';
 import 'constants.dart';
+
 
 class StartPage extends StatefulWidget {
   @override
@@ -13,16 +13,6 @@ class StartPage extends StatefulWidget {
 class _StartPageState extends State<StartPage> {
 
   int _selectedIndex = 0;
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => RecipePage())
-      );
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +22,7 @@ class _StartPageState extends State<StartPage> {
           children:[
             Column(
               children: [
+                // User Container
                 Container(
                   height: 200,
                   margin: EdgeInsets.all(15),
@@ -60,6 +51,7 @@ class _StartPageState extends State<StartPage> {
                     ],
                   ),
                 ),
+                //New Dishes Container
                 Container(
                   margin: EdgeInsets.all(20),
                   child: Row(
@@ -83,6 +75,7 @@ class _StartPageState extends State<StartPage> {
                       ]
                   ),
                 ),
+                // Dish Category Slider
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child:
@@ -96,6 +89,7 @@ class _StartPageState extends State<StartPage> {
                 ),
                 ),
                 SizedBox(height: 20),
+                // Recipe Container Slider
                 Expanded(child:
                     SingleChildScrollView(
                       scrollDirection: Axis.vertical,
@@ -128,6 +122,7 @@ class _StartPageState extends State<StartPage> {
               ],
             ),
         ]),
+        // Bottom Navigation
         bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(
               canvasColor: Color(0xFF212121)
@@ -149,7 +144,7 @@ class _StartPageState extends State<StartPage> {
             ],
             currentIndex: _selectedIndex,
               selectedItemColor: Colors.white,
-            onTap: _onItemTapped,
+            // onTap: _onItemTapped,
           ),
         ));
   }

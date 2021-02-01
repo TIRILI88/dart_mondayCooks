@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class FoodScrollContainer extends StatelessWidget {
   FoodScrollContainer({@required this.recipeName, @required this.scoreNumber, @required this.cookingTime, @required this.imagePath});
 
@@ -8,9 +9,16 @@ class FoodScrollContainer extends StatelessWidget {
   final int cookingTime;
   final String imagePath;
 
-
   @override
   Widget build(BuildContext context) {
+
+    void _onTapNavigation() {
+      Navigator.of(context).pushNamed('/recipePage');
+          // recipeTitle: recipeName,
+          // recipeImagePath: imagePath,
+          // recipeDuration: cookingTime);
+    }
+
     return Container(
         height: 250,
         padding: EdgeInsets.all(10),
@@ -21,6 +29,7 @@ class FoodScrollContainer extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            //Left Side Text
             Container(
                 margin: EdgeInsets.all(10),
               padding: EdgeInsets.all(10),
@@ -68,19 +77,26 @@ class FoodScrollContainer extends StatelessWidget {
                     )
 
                 ])),
-            Container(
-              width: 200,
-              height: 280,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    fit: BoxFit.cover, image: AssetImage(imagePath)),
-                color: Colors.orange,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
+            //Right Side Picture
+            GestureDetector(
+              onTap: _onTapNavigation,
+              child: Hero(
+                  tag: 'recipeImage',
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.4,//200,
+                    height: 280,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          fit: BoxFit.cover, image: AssetImage(imagePath)),
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                    ),
+                  ),
+                ),
             )
           ],
         )
-    );;
+    );
   }
 }
 
