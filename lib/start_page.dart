@@ -1,3 +1,4 @@
+import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'dish_container.dart';
 import 'scroll_container.dart';
@@ -98,6 +99,8 @@ class _StartPageState extends State<StartPage> {
                 ),
                 ),
                 SizedBox(height: 20),
+                // *** SEARCHBAR FOR LATER USE
+                // SearchBar(onSearch: onSearch, onItemFound: onItemFound),
                 // Recipe Container Slider
                 Expanded(child:
                     SingleChildScrollView(
@@ -126,7 +129,6 @@ class _StartPageState extends State<StartPage> {
                         ],
                       ),
                     )
-                  //
                 ),
               ],
             ),

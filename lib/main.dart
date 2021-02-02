@@ -3,6 +3,7 @@ import 'start_page.dart';
 import 'recipe_page.dart';
 import 'tabs_page.dart';
 import 'user_login.dart';
+import 'constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 
@@ -18,8 +19,8 @@ class MondayCooks extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark().copyWith(
-        primaryColor: Color(0xFF212121),
-        scaffoldBackgroundColor: Color(0xFF212121),
+        primaryColor: kColorBackgroundDark,
+        scaffoldBackgroundColor: kColorBackgroundDark,
       ),
       home: TabsPage(),
       routes: {

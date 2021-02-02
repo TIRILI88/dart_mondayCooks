@@ -19,63 +19,74 @@ class _UploadPageState extends State<UploadPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-          child: Column(
-            children: [
-              SizedBox(height: 300),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: TextField(
-                  controller: messageTextController,
-                  textAlign: TextAlign.center,
-                  decoration: kTextFieldDecoration.copyWith(hintText: 'Category'),
-                  onChanged: (value) {
-                    category = value;
-                  },
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/default_recipe.jpeg'),
+            fit: BoxFit.cover,
+          )
+        ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: kColorContainer.withOpacity(0.9)
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: 300),
+                Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: TextField(
+                    controller: messageTextController,
+                    textAlign: TextAlign.center,
+                    decoration: kTextFieldDecoration.copyWith(hintText: 'Category'),
+                    onChanged: (value) {
+                      category = value;
+                    },
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: TextField(
-                  controller: messageTextController,
-                  textAlign: TextAlign.center,
-                  decoration: kTextFieldDecoration.copyWith(hintText: 'Recipe Name'),
-                  onChanged: (value) {
-                    recipeName = value;
-                  },
+                Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: TextField(
+                    controller: messageTextController,
+                    textAlign: TextAlign.center,
+                    decoration: kTextFieldDecoration.copyWith(hintText: 'Recipe Name'),
+                    onChanged: (value) {
+                      recipeName = value;
+                    },
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: TextField(
-                  controller: messageTextController,
-                  textAlign: TextAlign.center,
-                  decoration: kTextFieldDecoration.copyWith(hintText: 'Image URL - DUMMY'),
-                  onChanged: (value) {
-                    imageURL = value;
-                  },
+                Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: TextField(
+                    controller: messageTextController,
+                    textAlign: TextAlign.center,
+                    decoration: kTextFieldDecoration.copyWith(hintText: 'Image URL - DUMMY'),
+                    onChanged: (value) {
+                      imageURL = value;
+                    },
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: TextField(
-                  controller: messageTextController,
-                  textAlign: TextAlign.center,
-                  decoration: kTextFieldDecoration.copyWith(hintText: 'Ingredients'),
-                  onChanged: (value) {
-                    ingredients = value;
-                  },
+                Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: TextField(
+                    controller: messageTextController,
+                    textAlign: TextAlign.center,
+                    decoration: kTextFieldDecoration.copyWith(hintText: 'Ingredients'),
+                    onChanged: (value) {
+                      ingredients = value;
+                    },
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: ElevatedButton(
-                  child: Text('Upload'),
-                    onPressed: (){
-                      DataBaseService().updateData(category, recipeName, imageURL, ingredients);
-                      messageTextController.clear();
-                    }),
-              )
-            ],
+                Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: ElevatedButton(
+                    child: Text('Upload'),
+                      onPressed: (){
+                        DataBaseService().updateData(category, recipeName, imageURL, ingredients);
+                        messageTextController.clear();
+                      }),
+                )
+              ],
+            ),
           ),
         ),
     );

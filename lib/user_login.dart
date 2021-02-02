@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:monday_cooks/database.dart';
@@ -15,6 +16,7 @@ class UserLogin extends StatefulWidget {
 
 class _UserLoginState extends State<UserLogin> {
 
+  final _firestore = FirebaseStorage.instance;
   final _auth = FirebaseAuth.instance;
   bool showSpinner = false;
   String name;
@@ -105,7 +107,11 @@ class _UserLoginState extends State<UserLogin> {
                                 final user = await _auth.signInWithEmailAndPassword(
                                     email: email, password: password);
                                 if (user != null) {
-                                  await DataBaseService(uid: _auth.currentUser.uid);
+                                   final user_id = await _auth.currentUser.uid;
+                                   //Push name to UID
+                                   // _firestore.collection('names').add({
+                                   //    'names': name,
+                                   // });
                                   Navigator.of(context).pushNamedAndRemoveUntil('/tabsPage', (Route<dynamic> route) => false);
                                   // Navigator.push(context, StartPage());
                                 }
