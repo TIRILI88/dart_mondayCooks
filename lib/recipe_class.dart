@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class Recipe {
 
   final String recipeTitle;
-  final String recipeImagePath;
+  final String recipeImage;
   final int recipeCookingTime;
   final double recipeScoreNumber;
 
-  Recipe({@required this.recipeTitle, @required this.recipeImagePath, @required this.recipeCookingTime, @required this.recipeScoreNumber});
+  Recipe(this.recipeTitle, this.recipeImage, this.recipeCookingTime, this.recipeScoreNumber);
 
 }

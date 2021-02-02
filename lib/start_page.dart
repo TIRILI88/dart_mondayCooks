@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'dish_container.dart';
 import 'scroll_container.dart';
 import 'constants.dart';
@@ -123,47 +121,7 @@ class _StartPageState extends State<StartPage> {
               ],
             ),
         ]),
-        // Bottom Navigation
-        bottomNavigationBar: Theme(
-          data: Theme.of(context).copyWith(
-              canvasColor: Color(0xFF212121)
-          ),
-          child: BottomNavigationBar(
-            items: [
-              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.home),
-              label: 'Home',
-              ),
-              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.lemon),
-                  label: 'Recipes'
-              ),
-              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.star),
-                  label: 'Favorites'
-              ),
-              BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.userCircle),
-                  label: 'User'
-              ),
-            ],
-            currentIndex: _selectedIndex,
-              selectedItemColor: Colors.white,
-            // onTap: _onItemTapped,
-          ),
-        ));
-  }
-  Future<Widget> _getImage(BuildContext context, String imageName) async {
-    Image image;
-    await FireStorageService.loadImage(context, imageName).then((value) {
-      image = Image.network(value.toString(), fit: BoxFit.scaleDown);
-    });
-    return image;
-  }
-
-}
-
-
-class FireStorageService extends ChangeNotifier {
-  FireStorageService();
-
-  static Future<dynamic> loadImage(BuildContext context, String Image) async {
-    return await FirebaseStorage.instance.ref().child(Image).getDownloadURL();
+        );
   }
 }
+
