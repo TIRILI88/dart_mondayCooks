@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dish_container.dart';
 import 'scroll_container.dart';
 import 'constants.dart';
+import 'tab_navigation.dart' as tab_navigation;
 
 
 class StartPage extends StatefulWidget {
@@ -11,7 +12,16 @@ class StartPage extends StatefulWidget {
 
 class _StartPageState extends State<StartPage> {
 
-  int _selectedIndex = 0;
+  String userName = 'Hi there';
+
+  // Future getName() async {
+  //   if (tab_navigation.isLoggedIn) {
+  //     userName = await tab_navigation.user.email;
+  //   } else {
+  //     userName = 'Hi There';
+  //   }
+  //   return userName;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +40,7 @@ class _StartPageState extends State<StartPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     // crossAxisAlignment: CrossAxisAlignment.baseline,
                     children: [
-                      Text('Hi Daniel',
+                      Text(userName,
                         style: TextStyle(
                           fontSize: 35,
                           color: Colors.white,

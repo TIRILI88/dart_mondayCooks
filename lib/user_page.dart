@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class UserPage extends StatelessWidget {
+
+class UserPage extends StatefulWidget {
+  @override
+  _UserPageState createState() => _UserPageState();
+}
+
+class _UserPageState extends State<UserPage> {
+
+  final _auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hi User'),
+        title: Text('Welcome'),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+            _auth.signOut();
+            Navigator.of(context).pushNamedAndRemoveUntil('/tabsPage', (Route<dynamic> route) => false);
+          })
+        ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                image: DecorationImage(
-                fit: BoxFit.cover, image: AssetImage('default_recipe.jpeg')),
-                color: Colors.orange,
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-
-          ))
-          )]
+      body: Container(
+        child: Text('Welcome'),
       ),
     );
   }

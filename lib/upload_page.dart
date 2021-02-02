@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:monday_cooks/constants.dart';
+import 'database.dart';
 
 class UploadPage extends StatefulWidget {
   @override
@@ -6,8 +8,76 @@ class UploadPage extends StatefulWidget {
 }
 
 class _UploadPageState extends State<UploadPage> {
+
+  final messageTextController = TextEditingController();
+  String category;
+  String recipeName;
+  String imageURL;
+  String ingredients;
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: Container(
+          child: Column(
+            children: [
+              SizedBox(height: 300),
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: TextField(
+                  controller: messageTextController,
+                  textAlign: TextAlign.center,
+                  decoration: kTextFieldDecoration.copyWith(hintText: 'Category'),
+                  onChanged: (value) {
+                    category = value;
+                  },
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: TextField(
+                  controller: messageTextController,
+                  textAlign: TextAlign.center,
+                  decoration: kTextFieldDecoration.copyWith(hintText: 'Recipe Name'),
+                  onChanged: (value) {
+                    recipeName = value;
+                  },
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: TextField(
+                  controller: messageTextController,
+                  textAlign: TextAlign.center,
+                  decoration: kTextFieldDecoration.copyWith(hintText: 'Image URL - DUMMY'),
+                  onChanged: (value) {
+                    imageURL = value;
+                  },
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: TextField(
+                  controller: messageTextController,
+                  textAlign: TextAlign.center,
+                  decoration: kTextFieldDecoration.copyWith(hintText: 'Ingredients'),
+                  onChanged: (value) {
+                    ingredients = value;
+                  },
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(10.0),
+                child: ElevatedButton(
+                  child: Text('Upload'),
+                    onPressed: (){
+                      DataBaseService().updateData(category, recipeName, imageURL, ingredients);
+                      messageTextController.clear();
+                    }),
+              )
+            ],
+          ),
+        ),
+    );
   }
 }
