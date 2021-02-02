@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'dish_container.dart';
 import 'scroll_container.dart';
 import 'constants.dart';
@@ -100,19 +101,19 @@ class _StartPageState extends State<StartPage> {
                             recipeName: 'Mexican Potatoes',
                             scoreNumber: 4.63,
                             cookingTime: 45,
-                            imagePath: 'images/mexcian_potatoes.jpeg',
+                            imagePath: 'mexcian_potatoes.jpeg',
                           ),
                           FoodScrollContainer(
                               recipeName: 'Salmon',
                               scoreNumber: 5.8,
                               cookingTime: 20,
-                              imagePath: 'images/salmon.jpeg'
+                              imagePath: 'salmon.jpeg'
                           ),
                           FoodScrollContainer(
                               recipeName: 'Pumpkin Soup',
                               scoreNumber: 3.61,
                               cookingTime: 35,
-                              imagePath: 'images/pumpkin_soup.jpeg'
+                              imagePath: 'pumpkin_soup.jpeg'
                           ),
                         ],
                       ),
@@ -148,5 +149,21 @@ class _StartPageState extends State<StartPage> {
           ),
         ));
   }
+  Future<Widget> _getImage(BuildContext context, String imageName) async {
+    Image image;
+    await FireStorageService.loadImage(context, imageName).then((value) {
+      image = Image.network(value.toString(), fit: BoxFit.scaleDown);
+    });
+    return image;
+  }
+
 }
 
+
+class FireStorageService extends ChangeNotifier {
+  FireStorageService();
+
+  static Future<dynamic> loadImage(BuildContext context, String Image) async {
+    return await FirebaseStorage.instance.ref().child(Image).getDownloadURL();
+  }
+}
