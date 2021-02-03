@@ -19,3 +19,17 @@ const kTextFieldDecoration = InputDecoration(
     borderRadius: BorderRadius.all(Radius.circular(32.0)),
   ),
 );
+
+
+ButtonStyle kElevatedButtonStyle = ElevatedButton.styleFrom(
+  elevation: 10,
+  minimumSize: Size(150.0, 50.0),
+  primary: Colors.orangeAccent,
+  onPrimary: Colors.white,
+  shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(30.0)),
+  textStyle: TextStyle(
+    fontSize: 20,
+  ),
+);
+

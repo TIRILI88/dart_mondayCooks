@@ -2,7 +2,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:monday_cooks/database.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'database.dart';
 import 'constants.dart';
@@ -107,11 +106,7 @@ class _UserLoginState extends State<UserLogin> {
                                 final user = await _auth.signInWithEmailAndPassword(
                                     email: email, password: password);
                                 if (user != null) {
-                                   final user_id = await _auth.currentUser.uid;
-                                   //Push name to UID
-                                   // _firestore.collection('names').add({
-                                   //    'names': name,
-                                   // });
+                                   DataBaseService().userName(name.toUpperCase());
                                   Navigator.of(context).pushNamedAndRemoveUntil('/tabsPage', (Route<dynamic> route) => false);
                                   // Navigator.push(context, StartPage());
                                 }
@@ -141,7 +136,7 @@ class _UserLoginState extends State<UserLogin> {
                                 final user = await _auth.createUserWithEmailAndPassword(
                                     email: email, password: password);
                                 if (user != null) {
-                                  await DataBaseService(uid: _auth.currentUser.uid);
+                                  DataBaseService().userName(name.toUpperCase());
                                   Navigator.of(context).pushNamedAndRemoveUntil('/tabsPage', (Route<dynamic> route) => false);
                                 }
                               }

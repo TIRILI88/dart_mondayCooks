@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:monday_cooks/database.dart';
+import 'database.dart';
 
 class FoodScrollContainer extends StatelessWidget {
   FoodScrollContainer(
@@ -93,7 +94,7 @@ class FoodScrollContainer extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
                         child: FutureBuilder(
-                          future: _getImage(context, imagePath),
+                          future: DataBaseService().getImage(context, imagePath),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
@@ -133,12 +134,6 @@ class FoodScrollContainer extends StatelessWidget {
                           },
                         ),
                       ),
-                      // decoration: BoxDecoration(
-                      //   image: DecorationImage(
-                      //       fit: BoxFit.cover, image: AssetImage(imagePath)),
-                      //   color: Colors.orange,
-                      //   borderRadius: BorderRadius.all(Radius.circular(10)),
-                      // ),
                     ),
                   ),
                 ),
@@ -147,20 +142,5 @@ class FoodScrollContainer extends StatelessWidget {
         ));
   }
 }
-Future<Widget> _getImage(BuildContext context, String imageName) async {
-  Image image;
-  await FireStorageService.loadImage(context, imageName).then((downloadUrl) {
-    image = Image.network(downloadUrl, fit: BoxFit.cover);
-  });
-  return image;
-}
 
-class FireStorageService extends ChangeNotifier {
-  FireStorageService();
 
-  // StorageReference photosReference = ;
-
-  static Future<dynamic> loadImage(BuildContext context, String image) async {
-    return await FirebaseStorage.instance.ref().child('images').child(image).getDownloadURL();
-  }
-}
