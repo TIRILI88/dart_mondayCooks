@@ -52,15 +52,18 @@ class DataBaseService {
 
   Future<String> getName() async {
     if (_auth.currentUser != null) {
+      final userId = _auth.currentUser.uid;
       final userData = await _firestore.collection('users').get();
-      for (var user in userData.docs) {
-        final lowerCaseName = user.data()['userName'].toLowerCase();
-        final name = lowerCaseName[0].toUpperCase() + lowerCaseName.substring(1);
-        print(name);
-        return 'Hi ${name}';
-      }
+        for (var user in userData.docs) {
+          // if (user['userID'] == userId) {
+          final lowerCaseName = user.data()['userName'];
+          final name = lowerCaseName[0].toUpperCase() + lowerCaseName.substring(1).toLowerCase();
+          // print(name);
+          return name;
+          // }
+        }
     } else {
-      return 'Hi There';
+      return 'There';
     }
   }
 }

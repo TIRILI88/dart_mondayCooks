@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:monday_cooks/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dialog_box.dart';
 import 'database.dart';
 import 'constants.dart';
 import 'rounded_button.dart';
@@ -105,13 +106,13 @@ class _UserLoginState extends State<UserLogin> {
                                 final user = await _auth.signInWithEmailAndPassword(
                                     email: email, password: password);
                                 if (user != null) {
-                                   DataBaseService().userName(name.toUpperCase());
+                                   DataBaseService().userName(name);
                                   Navigator.of(context).pushNamedAndRemoveUntil('/tabsPage', (Route<dynamic> route) => false);
                                   // Navigator.push(context, StartPage());
                                 }
                               }
                               catch (e) {
-                                _showMyDialog(e.toString());
+                                DialogAlert(message: e.toString());
                               }
                               if(this.mounted) {
                                 setState(() {
@@ -140,7 +141,7 @@ class _UserLoginState extends State<UserLogin> {
                                 }
                               }
                               catch (e) {
-                                _showMyDialog(e.toString());
+                                DialogAlert(message: e.toString());
                               }
                               if(this.mounted) {
                                 setState(() {
@@ -160,31 +161,4 @@ class _UserLoginState extends State<UserLogin> {
       ),
     );
   }
-  Future<void> _showMyDialog(String message) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Something went wrong'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(message),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Approve'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
 }

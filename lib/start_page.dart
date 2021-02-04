@@ -1,5 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flappy_search_bar/flappy_search_bar.dart';
+// import 'SEARCH-BAR';
 import 'package:flutter/material.dart';
 import 'database.dart';
 import 'dish_container.dart';
@@ -15,7 +14,6 @@ class StartPage extends StatefulWidget {
 
 class _StartPageState extends State<StartPage> {
 
-
   String userName = '';
   User loggedInUser;
 
@@ -26,8 +24,9 @@ class _StartPageState extends State<StartPage> {
     }));
   }
 
-
   @override
+
+
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(
@@ -45,7 +44,7 @@ class _StartPageState extends State<StartPage> {
                     // crossAxisAlignment: CrossAxisAlignment.baseline,
                     children: [
                       //// *****
-                      Text(userName,
+                      Text('Hi $userName,',
                         style: TextStyle(
                           fontSize: 35,
                           color: Colors.white,
