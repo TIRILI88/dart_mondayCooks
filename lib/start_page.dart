@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
+import 'database.dart';
 import 'dish_container.dart';
 import 'scroll_container.dart';
 import 'constants.dart';
-import 'tab_navigation.dart' as tab_navigation;
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 class StartPage extends StatefulWidget {
@@ -13,16 +15,17 @@ class StartPage extends StatefulWidget {
 
 class _StartPageState extends State<StartPage> {
 
-  String userName = 'Hi there';
 
-  // Future getName() async {
-  //   if (tab_navigation.isLoggedIn) {
-  //     userName = await tab_navigation.user.email;
-  //   } else {
-  //     userName = 'Hi There';
-  //   }
-  //   return userName;
-  // }
+  String userName = '';
+  User loggedInUser;
+
+
+  _StartPageState() {
+    DataBaseService().getName().then((value) => setState(() {
+      userName = value;
+    }));
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +44,7 @@ class _StartPageState extends State<StartPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     // crossAxisAlignment: CrossAxisAlignment.baseline,
                     children: [
+                      //// *****
                       Text(userName,
                         style: TextStyle(
                           fontSize: 35,

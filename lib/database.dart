@@ -6,20 +6,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 class DataBaseService {
 
-  String imageURL;
-
-  Future<String> getUserUID() async {
-    final _auth = FirebaseAuth.instance;
-    final uid = await _auth.currentUser.uid;
-
-    return uid;
-  }
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
 
   Future<void> userName(userName) async {
     final CollectionReference user = FirebaseFirestore.instance.collection('users');
+    final uid = await _auth.currentUser.uid;
     return await user.add({
       'userName': userName,
-      'userID' : getUserUID(),
+      'userID' : uid,
     });
   }
 
@@ -31,33 +26,47 @@ class DataBaseService {
     return image;
   }
 
-  Future<void> uploadImage(BuildContext context, image) async {
-    String fileName = (image.path);
+  Future uploadImage(image) async {
+    String fileName = (DateTime.now().toString());
 
-    Reference firebaseStorageRef = FirebaseStorage.instance.ref().child('images').child(fileName);
-    final uploadTask = firebaseStorageRef.putFile(image);
-    final downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-    imageURL = downloadURL;
+    Reference firebaseStorageRef = FirebaseStorage.instance.ref().child('images/$fileName');
+    firebaseStorageRef.putFile(image);
+    // final downloadURL = await FirebaseStorage.instance.ref().child('images').child(fileName).getDownloadURL();
 
-    return;
+    return fileName; //downloadURL;
   }
 
-  Future uploadRecipe(String category,String recipeName, String ingredients) async {
+  Future uploadRecipe(String category,String recipeName, String ingredients, image) async {
     final CollectionReference recipesCollection = FirebaseFirestore.instance.collection('recipes');
+    final uid = await _auth.currentUser.uid;
+    final imageURL = await uploadImage(image);
+
     return await recipesCollection.add({
-      'userID': getUserUID(),
+      'userID': uid,
       'category': category,
       'recipeName': recipeName,
       'imageURL': imageURL,
       'ingredients': ingredients,
     });
   }
+
+  Future<String> getName() async {
+    if (_auth.currentUser != null) {
+      final userData = await _firestore.collection('users').get();
+      for (var user in userData.docs) {
+        final lowerCaseName = user.data()['userName'].toLowerCase();
+        final name = lowerCaseName[0].toUpperCase() + lowerCaseName.substring(1);
+        print(name);
+        return 'Hi ${name}';
+      }
+    } else {
+      return 'Hi There';
+    }
+  }
 }
 
 class FireStorageService extends ChangeNotifier {
   FireStorageService();
-
-  // StorageReference photosReference = ;
 
   static Future<dynamic> loadImage(BuildContext context, String image) async {
     return await FirebaseStorage.instance.ref().child('images').child(image).getDownloadURL();
