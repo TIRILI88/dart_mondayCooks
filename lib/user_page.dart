@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'default_data.dart';
 
 
 class UserPage extends StatefulWidget {
@@ -20,6 +21,9 @@ class _UserPageState extends State<UserPage> {
           IconButton(
               icon: Icon(Icons.close),
               onPressed: () {
+                setState(() {
+                  DefaultData.userName = 'There';
+                });
             _auth.signOut();
             Navigator.of(context).pushNamedAndRemoveUntil('/tabsPage', (Route<dynamic> route) => false);
           })

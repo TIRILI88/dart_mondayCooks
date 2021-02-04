@@ -24,10 +24,6 @@ class MondayCooks extends StatelessWidget {
       ),
       home: TabsPage(),
       routes: {
-        '/recipePage': (context) => RecipePage(
-            recipeTitle: 'recipeTitle',
-            recipeImagePath: 'images/default_recipe.jpeg',
-            recipeDuration: 0),
         '/startPage': (context) => StartPage(),
         '/tabsPage' :(context) => TabsPage(),
         '/userLogin': (context) => UserLogin(),

@@ -4,21 +4,16 @@ import 'database.dart';
 
 class FoodScrollContainer extends StatelessWidget {
   FoodScrollContainer(
-      {@required this.recipeName, @required this.scoreNumber, @required this.cookingTime, @required this.imagePath});
+      {this.recipeName, this.scoreNumber, this.cookingTime, this.imagePath, this.onTapNavigation});
 
   final String recipeName;
   final double scoreNumber;
   final int cookingTime;
   final String imagePath;
+  final Function onTapNavigation;
 
   @override
   Widget build(BuildContext context) {
-    void _onTapNavigation() {
-      Navigator.of(context).pushNamed('/recipePage');
-      // recipeTitle: recipeName,
-      // recipeImagePath: imagePath,
-      // recipeDuration: cookingTime);
-    }
 
     return Container(
         height: 250,
@@ -80,59 +75,56 @@ class FoodScrollContainer extends StatelessWidget {
                       ])),
               //Right Side Picture
               GestureDetector(
-                onTap: _onTapNavigation,
-                child: Hero(
-                  tag: 'recipeImage',
-                  child: Material(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * 0.4, //200,
-                      height: 280,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10.0),
-                        child: FutureBuilder(
-                          future: DataBaseService().getImage(context, imagePath),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              return Container(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width / 1.2,
-                                height: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width / 0.8,
-                                child: snapshot.data,
-                              );
-                            }
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Container(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width / 1.2,
-                                height: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width / 0.8,
-                                child: CircularProgressIndicator(
-                                ),
-                              );
-                            }
+                onTap: onTapNavigation,
+                child: Material(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: Container(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.4, //200,
+                    height: 280,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: FutureBuilder(
+                        future: DataBaseService().getImage(context, imagePath),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
                             return Container(
-                              child: Text('ERROR',
-                                style: TextStyle(
-                                    color: Colors.white
-                                ),),
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width / 1.2,
+                              height: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width / 0.8,
+                              child: snapshot.data,
                             );
-                          },
-                        ),
+                          }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Container(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width / 1.2,
+                              height: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width / 0.8,
+                              child: CircularProgressIndicator(
+                              ),
+                            );
+                          }
+                          return Container(
+                            child: Text('ERROR',
+                              style: TextStyle(
+                                  color: Colors.white
+                              ),),
+                          );
+                        },
                       ),
                     ),
                   ),

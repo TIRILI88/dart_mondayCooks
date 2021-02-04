@@ -1,41 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'recipe_class.dart';
+import 'database.dart';
 
 
 class RecipePage extends StatelessWidget {
-  RecipePage({@required this.recipeTitle, @required  this.recipeImagePath,@required  this.recipeDuration});
+  RecipePage({this.recipe});
   
-  final String recipeTitle;
-  final String recipeImagePath;
-  final int recipeDuration;
+  final Recipe recipe;
+
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(recipeTitle),
+        title: Text(recipe.recipeName),
         actions: [
-          Icon(FontAwesomeIcons.star)
+          Padding(
+              padding: EdgeInsets.only(right: 30.0),
+              child: Icon(FontAwesomeIcons.star))
         ],
       ),
       body: Column(
         children: [
-          // SizedBox(height: 50),
           Expanded(
-            child: Flexible(
-              child: Hero(
-                tag: 'recipeImage',
-                child: Container(
-                  height: 300,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.cover, image: AssetImage(recipeImagePath)),
-                    color: Colors.orange,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                ),
-              ),
+            child: FutureBuilder(
+              future: DataBaseService().getImage(context, recipe.recipeURL),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState ==
+                    ConnectionState.done) {
+                  return Container(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 1.2,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 0.8,
+                    child: snapshot.data,
+                  );
+                }
+                if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return Container(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 1,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 1,
+                    child: CircularProgressIndicator(
+                    ),
+                  );
+                }
+                return Container(
+                  child: Text('ERROR',
+                    style: TextStyle(
+                        color: Colors.white
+                    ),),
+                );
+              },
             ),
           ),
           SlidingUpPanel(
@@ -65,7 +93,7 @@ class RecipePage extends StatelessWidget {
                         color: Colors.orangeAccent,
                         borderRadius: BorderRadius.circular(10)
                     ),
-                    child: Text('${recipeDuration} MIN',
+                    child: Text('${recipe.recipeTime} MIN',
                         style: TextStyle(
                             color: Color(0xFF212121),
                             fontSize: 20,

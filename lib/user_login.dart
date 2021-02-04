@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:monday_cooks/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:monday_cooks/default_data.dart';
 import 'dialog_box.dart';
 import 'database.dart';
 import 'constants.dart';
@@ -136,7 +137,10 @@ class _UserLoginState extends State<UserLogin> {
                                 final user = await _auth.createUserWithEmailAndPassword(
                                     email: email, password: password);
                                 if (user != null) {
-                                  DataBaseService().userName(name.toUpperCase());
+                                  DataBaseService().userName(name);
+                                  setState(() {
+                                    DefaultData.userName = name;
+                                  });
                                   Navigator.of(context).pushNamedAndRemoveUntil('/tabsPage', (Route<dynamic> route) => false);
                                 }
                               }

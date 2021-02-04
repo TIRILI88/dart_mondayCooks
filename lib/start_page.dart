@@ -1,10 +1,13 @@
 // import 'SEARCH-BAR';
 import 'package:flutter/material.dart';
+import 'package:monday_cooks/default_data.dart';
+import 'package:monday_cooks/recipe_page.dart';
 import 'database.dart';
 import 'dish_container.dart';
 import 'scroll_container.dart';
 import 'constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class StartPage extends StatefulWidget {
@@ -12,22 +15,20 @@ class StartPage extends StatefulWidget {
   _StartPageState createState() => _StartPageState();
 }
 
+
 class _StartPageState extends State<StartPage> {
 
-  String userName = '';
+  final recipes = FirebaseFirestore.instance.collection('recipes').get();
+
   User loggedInUser;
-
-
-  _StartPageState() {
-    DataBaseService().getName().then((value) => setState(() {
-      userName = value;
-    }));
-  }
+  String documentId;
+  String userName = 'There';
 
   @override
-
-
   Widget build(BuildContext context) {
+  setState(() {
+    userName = DefaultData.userName;
+  });
     return Scaffold(
         body: Stack(
           alignment: Alignment.topCenter,
@@ -43,13 +44,11 @@ class _StartPageState extends State<StartPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     // crossAxisAlignment: CrossAxisAlignment.baseline,
                     children: [
+                      // GetUserName(),
+
                       //// *****
                       Text('Hi $userName,',
-                        style: TextStyle(
-                          fontSize: 35,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: kWelcomeTextField
                       ),
                       Text('I hope you are in the mood to cook!',
                         style: TextStyle(
@@ -106,34 +105,38 @@ class _StartPageState extends State<StartPage> {
                 // SearchBar(onSearch: onSearch, onItemFound: onItemFound),
                 // Recipe Container Slider
                 Expanded(child:
-                    SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child:
-                      Column(
-                        children: [
-                          FoodScrollContainer(
-                            recipeName: 'Mexican Potatoes',
+                    FutureBuilder(
+                      future: DataBaseService().getRecipes(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.data == null) {
+                          return Container(
+                            child: Text('Loading ....',
+                            style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.white,)
+                          ));
+                        } else {
+                        return ListView.builder(
+                        itemCount: 4,
+                        itemBuilder: (BuildContext context, int index){
+                          return FoodScrollContainer(
+                            recipeName: snapshot.data[index].recipeName,
                             scoreNumber: 4.63,
                             cookingTime: 45,
-                            imagePath: 'mexcian_potatoes.jpeg',
-                          ),
-                          FoodScrollContainer(
-                              recipeName: 'Salmon',
-                              scoreNumber: 5.8,
-                              cookingTime: 20,
-                              imagePath: 'salmon.jpeg'
-                          ),
-                          FoodScrollContainer(
-                              recipeName: 'Pumpkin Soup',
-                              scoreNumber: 3.61,
-                              cookingTime: 35,
-                              imagePath: 'pumpkin_soup.jpeg'
-                          ),
-                        ],
-                      ),
+                            imagePath: snapshot.data[index].recipeURL,
+                            onTapNavigation: () {
+                              Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => RecipePage(recipe: snapshot.data[index])));
+                            },
+                          );
+                          });
+                        }
+                      },
                     )
-                ),
-              ],
+
+
+                        ),
+                ],
             ),
         ]),
         );

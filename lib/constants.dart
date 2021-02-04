@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 const Color kColorContainer = Color(0xFF363636);
 const Color kColorBackgroundDark = Color(0xFF212121);
 
+const kWelcomeTextField = TextStyle(
+  fontSize: 35,
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+);
+
 const kTextFieldDecoration = InputDecoration(
   hintText: 'Enter a value',
   contentPadding:

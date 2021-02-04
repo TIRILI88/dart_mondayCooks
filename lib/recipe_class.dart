@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class Recipe {
 
-  final String recipeTitle;
-  final String recipeImage;
-  final int recipeCookingTime;
-  final double recipeScoreNumber;
+  final String recipeName;
+  final String recipeURL;
+  final double recipeScore = 4.63;
+  final int recipeTime = 45;
 
-  Recipe(this.recipeTitle, this.recipeImage, this.recipeCookingTime, this.recipeScoreNumber);
+  Recipe(this.recipeName, this.recipeURL);
 
 }
