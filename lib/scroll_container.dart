@@ -86,45 +86,48 @@ class FoodScrollContainer extends StatelessWidget {
                     height: 280,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: FutureBuilder(
-                        future: DataBaseService().getImage(context, imagePath),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
+                      child: Hero(
+                        tag: 'recipePicture',
+                        child: FutureBuilder(
+                          future: DataBaseService().getImage(context, imagePath),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              return Container(
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width / 1.2,
+                                height: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width / 0.8,
+                                child: snapshot.data,
+                              );
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Container(
+                                width: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width / 1.2,
+                                height: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width / 0.8,
+                                child: CircularProgressIndicator(
+                                ),
+                              );
+                            }
                             return Container(
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width / 1.2,
-                              height: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width / 0.8,
-                              child: snapshot.data,
+                              child: Text('ERROR',
+                                style: TextStyle(
+                                    color: Colors.white
+                                ),),
                             );
-                          }
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Container(
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width / 1.2,
-                              height: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width / 0.8,
-                              child: CircularProgressIndicator(
-                              ),
-                            );
-                          }
-                          return Container(
-                            child: Text('ERROR',
-                              style: TextStyle(
-                                  color: Colors.white
-                              ),),
-                          );
-                        },
+                          },
+                        ),
                       ),
                     ),
                   ),

@@ -23,7 +23,6 @@ class _UploadPageState extends State<UploadPage> {
 
   Future getImage(source) async {
     final pickedFile = await ImagePicker.pickImage(source: source);
-
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
@@ -35,11 +34,18 @@ class _UploadPageState extends State<UploadPage> {
 
   final categoryTextController = TextEditingController(); //..text = 'Main Dish';
   final recipeTextController = TextEditingController(); //..text = 'Tomatoes';
-  final ingredientTextController = TextEditingController(); //..text = 'Tomatoes, Garlic, Oil';
+  final ingredientTextController = TextEditingController();
+  final cookTimeTextController = TextEditingController();
+  final scoreTextController = TextEditingController();
+  final recipeTextTextController = TextEditingController();
   String category;
+  int cookTime;
+  double recipeScore;
   String recipeName;
   String imageURL;
   String ingredients;
+  String recipeText;
+  String dropdownValue = 'Category';
 
   @override
   Widget build(BuildContext context) {
@@ -59,18 +65,68 @@ class _UploadPageState extends State<UploadPage> {
               ),
               child: Column(
                 children: [
-                  SizedBox(height: 300),
+                  SizedBox(height: 150),
+                  // Category Dropdown
                   Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: TextField(
-                      controller: categoryTextController,
-                      textAlign: TextAlign.center,
-                      decoration: kTextFieldDecoration.copyWith(hintText: 'Category'),
-                      onChanged: (categoryValue) {
-                        category = categoryValue;
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      isDense: true,
+                      value: dropdownValue,
+                      icon: Icon(FontAwesomeIcons.angleDown),
+                      iconSize: 24,
+                      elevation: 16,
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.orangeAccent
+                      ),
+                      onChanged: (String newValue) {
+                        setState(() {
+                          dropdownValue = newValue;
+                        });
                       },
+                      items: <String>['Category', 'Main Dish', 'Dessert', 'Appetizer']
+                          .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value));
+                        }).toList(),
                     ),
                   ),
+                  // Row: Cooking Time + Score
+                  Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: TextField(
+                            controller: cookTimeTextController,
+                            textAlign: TextAlign.center,
+                            decoration: kTextFieldDecoration.copyWith(hintText: 'Cooking Time'),
+                            onChanged: (cookTimeValue) {
+                              cookTime = int.parse(cookTimeValue);
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 10.0),
+                        Flexible(
+                          child: TextField(
+                            controller: scoreTextController,
+                            textAlign: TextAlign.center,
+                            decoration: kTextFieldDecoration.copyWith(hintText: 'Your Score'),
+                            onChanged: (scoreValue) {
+                              recipeScore = double.parse(scoreValue);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Recipe Name Text
                   Padding(
                     padding: EdgeInsets.all(10.0),
                     child: TextField(
@@ -82,6 +138,7 @@ class _UploadPageState extends State<UploadPage> {
                       },
                     ),
                   ),
+                  // Ingredients Text
                   Padding(
                     padding: EdgeInsets.all(10.0),
                     child: TextField(
@@ -93,6 +150,36 @@ class _UploadPageState extends State<UploadPage> {
                       },
                     ),
                   ),
+
+                  // Recipe Step Text
+                  Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.orangeAccent),
+                            borderRadius: BorderRadius.all(Radius.circular(32.0))
+                        ),
+                        height: 200.0,
+                        child: TextField(
+                          maxLines: 10,
+                          textAlign: TextAlign.left,
+                          decoration: InputDecoration(
+                            hintText: 'Recipe Steps',
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            contentPadding:
+                              EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                          ),
+                          onChanged: (recipeTextValue) {
+                            recipeText = recipeTextValue;
+                          },
+                        ),
+                      ),
+                  ),
+
+                  //Row camera Buttons
                   Padding(
                     padding: EdgeInsets.all(10.0),
                     child: Row(
@@ -116,6 +203,7 @@ class _UploadPageState extends State<UploadPage> {
                     ]),
                   ),
                   SizedBox(height: 30),
+                  // Upload Button
                   Padding(
                     padding: EdgeInsets.all(10.0),
                     child: ElevatedButton(
@@ -127,7 +215,8 @@ class _UploadPageState extends State<UploadPage> {
                         });
                         try {
                           if (_auth.currentUser != null) {
-                            await DataBaseService().uploadRecipe(category, recipeName, ingredients, _image);
+                            await DataBaseService().uploadRecipe(dropdownValue, recipeName, ingredients, _image,
+                                cookTime, recipeScore, recipeText);
                           }
                         }
                          catch (e) {
@@ -137,6 +226,9 @@ class _UploadPageState extends State<UploadPage> {
                         categoryTextController.clear();
                         recipeTextController.clear();
                         ingredientTextController.clear();
+                        scoreTextController.clear();
+                        cookTimeTextController.clear();
+                        // recipeTextController.clear();
                         setState(() {
                           showSpinner = false;
                         });

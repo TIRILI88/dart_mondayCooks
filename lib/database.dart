@@ -45,7 +45,7 @@ class DataBaseService {
   }
 
   Future uploadRecipe(String category, String recipeName, String ingredients,
-      image) async {
+      image, int cookTime, double recipeScore, String recipeText) async {
     final CollectionReference recipesCollection = FirebaseFirestore.instance
         .collection('recipes');
     final uid = await _auth.currentUser.uid;
@@ -57,6 +57,9 @@ class DataBaseService {
       'recipeName': recipeName,
       'imageURL': imageURL,
       'ingredients': ingredients,
+      'cookTime': cookTime,
+      'recipeScore': recipeScore,
+      'recipeText': recipeText
     });
   }
 
@@ -67,6 +70,7 @@ class DataBaseService {
       Recipe recipeObj = Recipe(recipe['recipeName'], recipe['imageURL']);
       recipes.add(recipeObj);
     }
+    print(recipes.length);
     return recipes;
   }
 

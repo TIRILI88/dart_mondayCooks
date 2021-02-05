@@ -117,7 +117,7 @@ class _StartPageState extends State<StartPage> {
                           ));
                         } else {
                         return ListView.builder(
-                        itemCount: 4,
+                        itemCount: snapshot.data.length,
                         itemBuilder: (BuildContext context, int index){
                           return FoodScrollContainer(
                             recipeName: snapshot.data[index].recipeName,
