@@ -121,8 +121,8 @@ class _StartPageState extends State<StartPage> {
                         itemBuilder: (BuildContext context, int index){
                           return FoodScrollContainer(
                             recipeName: snapshot.data[index].recipeName,
-                            scoreNumber: 4.63,
-                            cookingTime: 45,
+                            scoreNumber: 4.5,//snapshot.data[index].recipeScore,
+                            cookingTime: 35, //snapshot.data[index].cookTime,
                             imagePath: snapshot.data[index].recipeURL,
                             onTapNavigation: () {
                               Navigator.push(context,

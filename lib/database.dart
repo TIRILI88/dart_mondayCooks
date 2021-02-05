@@ -64,10 +64,12 @@ class DataBaseService {
   }
 
   Future<List<Recipe>> getRecipes() async {
+    print('getRecipes() started');
+
     final recipesData = await FirebaseFirestore.instance.collection('recipes').get();
     List<Recipe> recipes = [];
     for(var recipe in recipesData.docs) {
-      Recipe recipeObj = Recipe(recipe['recipeName'], recipe['imageURL']);
+      Recipe recipeObj = Recipe(recipe['recipeName'], recipe['imageURL'], recipe['category'], recipe['recipeText']); //, recipe['cookTime'], recipe['recipeScore'],
       recipes.add(recipeObj);
     }
     print(recipes.length);

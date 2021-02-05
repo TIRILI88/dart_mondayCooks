@@ -96,7 +96,7 @@ class RecipePage extends StatelessWidget {
                         color: Colors.orangeAccent,
                         borderRadius: BorderRadius.circular(10)
                     ),
-                    child: Text('${recipe.recipeTime} MIN',
+                    child: Text('45 MIN', //${recipe.cookTime}
                         style: TextStyle(
                             color: Color(0xFF212121),
                             fontSize: 20,
@@ -108,7 +108,7 @@ class RecipePage extends StatelessWidget {
             ),
             panel: Center(
               child:
-                Text('Recipe Goes Here'),
+                Text(recipe.recipeText),
             ),
           ),
         ],

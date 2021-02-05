@@ -89,7 +89,7 @@ class _UploadPageState extends State<UploadPage> {
                           dropdownValue = newValue;
                         });
                       },
-                      items: <String>['Category', 'Main Dish', 'Dessert', 'Appetizer']
+                      items: <String>['Category', 'Main Dish', 'Dessert', 'Appetizer', 'Salad']
                           .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
