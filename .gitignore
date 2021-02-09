@@ -47,3 +47,4 @@ app.*.map.json
 
 # testing
 lib/test_startpage.dart
+ios/Runner/GoogleService-Info.plist
