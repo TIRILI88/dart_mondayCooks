@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 const Color kColorContainer = Color(0xFF363636);
 const Color kColorBackgroundDark = Color(0xFF212121);
 
+const List kWelcomePhrases = [
+  'Time to cook!', 'Is it monday already?', 'Hungry? - Me too!', 'Let get something good on the table!',
+];
+
 const kWelcomeTextField = TextStyle(
   fontSize: 35,
   color: Colors.white,

@@ -1,5 +1,5 @@
-// import 'SEARCH-BAR';
 import 'package:flutter/material.dart';
+import 'package:monday_cooks/debouncer_class.dart';
 import 'package:monday_cooks/recipe_class.dart';
 import 'package:monday_cooks/recipe_page.dart';
 import 'database.dart';
@@ -8,6 +8,7 @@ import 'scroll_container.dart';
 import 'constants.dart';
 import 'category_class.dart';
 import 'user_data.dart';
+import 'dart:math';
 
 
 class StartPage extends StatefulWidget {
@@ -21,6 +22,7 @@ class _StartPageState extends State<StartPage> {
   List<Recipe> filteredRecipes;
   List<Category> categories;
   List<UserData> user;
+  final _debouncer = Debouncer(millisenconds: 500);
 
   @override
   void initState() {
@@ -50,30 +52,16 @@ class _StartPageState extends State<StartPage> {
               children: [
                 // User Container
                 Container(
-                  height: 200,
+                  height: 150,
                   margin: EdgeInsets.all(15),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      FutureBuilder(
-                          future: DataBaseService().getCurrentUser(),
-                          builder: (BuildContext context, AsyncSnapshot snapshot) {
-                            if (snapshot.data == null) {
-                              return Text('Hi There!',
-                              style: kWelcomeTextField);
-                            } else {
-                              return Text('Hi ${snapshot.data[0].userName}',
-                              style: kWelcomeTextField);
-                           }
-                        }
+                      Center(
+                        child: Text(kWelcomePhrases[Random().nextInt(kWelcomePhrases.length)],
+                          style: kWelcomeTextField),
                       ),
-                      Text('I hope you are in the mood to cook!',
-                        style: TextStyle(
-                            fontSize: 25,
-                            color: Colors.white,
-                            // fontWeight: FontWeight.bold
-                        ),),
                       SizedBox(height: 20),
                       Divider(
                           color: Colors.grey
@@ -83,31 +71,50 @@ class _StartPageState extends State<StartPage> {
                 ),
                 //New Dishes Container
                 Container(
-                  margin: EdgeInsets.all(20),
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Text(
-                          'Total dishes',
-                          style: TextStyle(
-                            fontSize: 35,
-                            fontWeight: FontWeight.bold
-                          ),
+                  margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                    child: TextField(
+                        decoration: kTextFieldDecoration.copyWith(
+                            hintText: 'What are you looking for?'
                         ),
-                        SizedBox(width: 20),
-                        Text(
-                          filteredRecipes.length.toString(),
-                          style: TextStyle(
-                              color: Colors.orangeAccent,
-                              fontSize: 20
-                          ),)
-                      ]
+                      onChanged: (string) {
+                          _debouncer.run((){
+                            setState(() {
+                              filteredRecipes = recipes.where((r) =>
+                              (r.category.toLowerCase().contains(string.toLowerCase()) ||
+                                  r.recipeText.toLowerCase().contains(string.toLowerCase()) ||
+                                  r.recipeName.toLowerCase().contains(string.toLowerCase()))
+                              ).toList();
+                            });
+                          });
+                      },
+                    )
+                ),
+                Container(
+                  margin: EdgeInsets.all(20.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(
+                        'Total dishes',
+                        style: TextStyle(
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Text(
+                        filteredRecipes.length.toString(),
+                        style: TextStyle(
+                            color: Colors.orangeAccent,
+                            fontSize: 20
+                        ),)
+                    ]
                   ),
                 ),
                 // Dish Category Slider
                 Container(
-                  height: 100,
+                  height: 80,
                   child: Expanded(
                     child: ListView.builder(
                         shrinkWrap: true,
@@ -127,8 +134,6 @@ class _StartPageState extends State<StartPage> {
                   ),
                 ),
                 SizedBox(height: 20),
-                // *** SEARCHBAR FOR LATER USE
-                // SearchBar(onSearch: onSearch, onItemFound: onItemFound),
                 // Recipe Container Slider
                 Expanded(child:
                 ListView.builder(
