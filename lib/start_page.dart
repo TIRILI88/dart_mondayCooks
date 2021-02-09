@@ -23,6 +23,8 @@ class _StartPageState extends State<StartPage> {
   List<Category> categories;
   List<UserData> user;
   final _debouncer = Debouncer(millisenconds: 500);
+  Random random = Random();
+  // int randInt = ;
 
   @override
   void initState() {
@@ -59,7 +61,7 @@ class _StartPageState extends State<StartPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Center(
-                        child: Text(kWelcomePhrases[Random().nextInt(kWelcomePhrases.length)],
+                        child: Text(kWelcomePhrases[0], //INSERT RANDOM NUMBER - WITHOUT RELOADING EVERYTHING TIME
                           style: kWelcomeTextField),
                       ),
                       SizedBox(height: 20),
@@ -82,7 +84,8 @@ class _StartPageState extends State<StartPage> {
                               filteredRecipes = recipes.where((r) =>
                               (r.category.toLowerCase().contains(string.toLowerCase()) ||
                                   r.recipeText.toLowerCase().contains(string.toLowerCase()) ||
-                                  r.recipeName.toLowerCase().contains(string.toLowerCase()))
+                                  r.recipeName.toLowerCase().contains(string.toLowerCase()) ||
+                                  r.ingredients.toLowerCase().contains(string.toLowerCase()))
                               ).toList();
                             });
                           });
@@ -114,23 +117,22 @@ class _StartPageState extends State<StartPage> {
                 ),
                 // Dish Category Slider
                 Container(
+                  margin: EdgeInsets.symmetric(vertical: 8.0),
                   height: 80,
-                  child: Expanded(
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: categories.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return DishContainer(
-                            category: categories[index].category,
-                            onTap: () {
-                              setState(() {
-                                filteredRecipes = recipes.where((r) => r.category.contains(categories[index].category)).toList();
-                              });
-                            },
-                          );
-                        }
-                    ),
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: categories.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return DishContainer(
+                          category: categories[index].category,
+                          onTap: () {
+                            setState(() {
+                              filteredRecipes = recipes.where((r) => r.category.contains(categories[index].category)).toList();
+                            });
+                          },
+                        );
+                      }
                   ),
                 ),
                 SizedBox(height: 20),

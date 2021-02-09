@@ -44,18 +44,18 @@ class TabNavigationItem {
         page: StartPage(), //TestStartPage()
         title: 'Home',
         icon: Icon(FontAwesomeIcons.home)),
-    TabNavigationItem(
-        page: SearchPage(),
-        title: 'Search',
-        icon: Icon(FontAwesomeIcons.search)),
+    // TabNavigationItem(
+    //     page: SearchPage(),
+    //     title: 'Search',
+    //     icon: Icon(FontAwesomeIcons.search)),
     TabNavigationItem(
         page: UploadPage(),
         title: 'Add Recipe',
         icon: Icon(FontAwesomeIcons.plusCircle)),
-    TabNavigationItem(
-        page: FavoritesPage(),
-        title: 'Favorites',
-        icon: Icon(FontAwesomeIcons.star)),
+    // TabNavigationItem(
+    //     page: FavoritesPage(),
+    //     title: 'Favorites',
+    //     icon: Icon(FontAwesomeIcons.star)),
     TabNavigationItem(
         page: isUserLoggedIn(),
         title: 'Me',

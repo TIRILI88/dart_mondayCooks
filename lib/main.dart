@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'start_page.dart';
-import 'recipe_page.dart';
 import 'tabs_page.dart';
 import 'user_login.dart';
 import 'constants.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 
 
 void main() async {
@@ -17,10 +17,16 @@ class MondayCooks extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]);
     return MaterialApp(
       theme: ThemeData.dark().copyWith(
         primaryColor: kColorBackgroundDark,
         scaffoldBackgroundColor: kColorBackgroundDark,
+        indicatorColor: Colors.orangeAccent,
+        accentColor: Colors.orangeAccent,
       ),
       home: TabsPage(),
       routes: {

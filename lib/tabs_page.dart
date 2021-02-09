@@ -28,8 +28,8 @@ class _TabsPageState extends State<TabsPage> {
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15.0),
-            topRight: Radius.circular(15.0)
+            topLeft: Radius.circular(25.0),
+            topRight: Radius.circular(25.0)
           ),
           child: BottomNavigationBar(
             currentIndex: _currentIndex,

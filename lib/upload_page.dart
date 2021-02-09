@@ -65,7 +65,7 @@ class _UploadPageState extends State<UploadPage> {
               ),
               child: Column(
                 children: [
-                  SizedBox(height: 150),
+                  SizedBox(height: 120),
                   // Category Dropdown
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
@@ -202,7 +202,6 @@ class _UploadPageState extends State<UploadPage> {
                             }),
                     ]),
                   ),
-                  SizedBox(height: 30),
                   // Upload Button
                   Padding(
                     padding: EdgeInsets.all(10.0),

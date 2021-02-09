@@ -100,28 +100,16 @@ class FoodScrollContainer extends StatelessWidget {
                           if (snapshot.connectionState ==
                               ConnectionState.done) {
                             return Container(
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width / 1.2,
-                              height: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width / 0.8,
+                              width: MediaQuery.of(context).size.width / 1.2,
+                              height: MediaQuery.of(context).size.width / 0.8,
                               child: snapshot.data,
                             );
                           }
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
                             return Container(
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width / 1.2,
-                              height: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width / 0.8,
+                              width: MediaQuery.of(context).size.width / 1.2,
+                              height: MediaQuery.of(context).size.width / 0.8,
                               child: CircularProgressIndicator(
                               ),
                             );

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:monday_cooks/constants.dart';
+import 'package:monday_cooks/recipe_image.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'recipe_class.dart';
-import 'database.dart';
-
+import 'package:monday_cooks/tab_widget.dart';
+import 'package:monday_cooks/recipe_class.dart';
 
 class RecipePage extends StatelessWidget {
   RecipePage({this.recipe});
   
   final Recipe recipe;
+  final double tabBarHeight = 80;
+  final panelController = PanelController();
 
   
   @override
@@ -22,90 +25,54 @@ class RecipePage extends StatelessWidget {
               child: Icon(FontAwesomeIcons.star))
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: FutureBuilder(
-              future: DataBaseService().getImage(context, recipe.recipeURL),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState ==
-                    ConnectionState.done) {
-                  return Container(
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .width / 0.8,
-                    child: snapshot.data,
-                  );
-                }
-                if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width / 1,
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .width / 1,
-                    child: CircularProgressIndicator(
-                    ),
-                  );
-                }
-                return Container(
-                  child: Text('ERROR',
-                    style: TextStyle(
-                        color: Colors.white
-                    ),),
-                );
-              },
-            ),
-          ),
-          SlidingUpPanel(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            color: Color(0xFF363636),
-            minHeight: 250,
-            maxHeight: 600,
-            padding: EdgeInsets.all(20),
-            // backdropEnabled: true,
-            header: Center(
-              // heightFactor: 3,
-              widthFactor: 1.2,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Recipe',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25
-                    )
-                  ),
-                  SizedBox(width: 150),
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: Colors.orangeAccent,
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: Text('${recipe.cookTime} MIN',
-                        style: TextStyle(
-                            color: Color(0xFF212121),
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold
-                        )),
-                  )
-                ],
-              ),
-            ),
-            panel: Center(
-              child:
-                Text(recipe.recipeText),
-            ),
-          ),
-        ],
+      body: SlidingUpPanel(
+        controller: panelController,
+        color: kColorContainer,
+        minHeight: MediaQuery.of(context).size.height * 0.3,
+        maxHeight: MediaQuery.of(context).size.height * 0.8,
+        panelBuilder: (scrollController) => buildSlidingPanel(
+          scrollController: scrollController,
+          panelController: panelController,
+        ),
+        body: Center(child: RecipeImageWidget(imageName: recipe.recipeURL))
       ),
     );
   }
+
+  Widget buildSlidingPanel({
+  @required PanelController panelController, @required ScrollController scrollController,
+}) =>
+      DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: buildTabBar(
+              onClicked: panelController.open, //
+            ),
+            body: TabBarView(
+              children: [
+                TabWidget(scrollController: scrollController, textValue: recipe.recipeText),
+                TabWidget(scrollController: scrollController, textValue: recipe.ingredients,)
+              ],
+            ),
+          ));
+
+ Widget buildTabBar({
+  @required VoidCallback onClicked,
+}) => PreferredSize(
+     preferredSize: Size.fromHeight(tabBarHeight - 8),
+      child: GestureDetector(
+        onTap: onClicked,
+        child: AppBar(
+          title: Icon(Icons.drag_handle),
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          bottom: TabBar(
+            tabs: [
+              Tab(child: Text('Recipe')),
+              Tab(child: Text('Ingredients'))
+            ],
+          ),
+        ),
+      ),
+ );
 }

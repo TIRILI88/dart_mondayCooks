@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:monday_cooks/category_class.dart';
 import 'recipe_class.dart';
 import 'default_data.dart';
@@ -14,8 +13,6 @@ class DataBaseService {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   String currentUser;
-  int totalRecipes = 0;
-
 
   Future<void> userName(userName) async {
     final CollectionReference user = _firestore.collection('users');
@@ -40,7 +37,6 @@ class DataBaseService {
 
   Future uploadImage(image) async {
     String fileName = (DateTime.now().toString());
-
     Reference firebaseStorageRef = FirebaseStorage.instance.ref().child(
         'images/$fileName');
     firebaseStorageRef.putFile(image);
@@ -75,10 +71,10 @@ class DataBaseService {
     final recipesData = await _firestore.collection('recipes').get();
     List<Recipe> recipes = [];
     for(var recipe in recipesData.docs) {
-      Recipe recipeObj = Recipe(recipe['recipeName'], recipe['imageURL'], recipe['recipeScore'].toDouble(), recipe['cookTime'].toInt(), recipe['category'], recipe['recipeText'], recipe['dateAdded']); //,
+      Recipe recipeObj = Recipe(recipe['recipeName'], recipe['imageURL'], recipe['recipeScore'].toDouble(), recipe['cookTime'].toInt(),
+          recipe['category'], recipe['recipeText'], recipe['dateAdded'], recipe['ingredients']); //,
       recipes.add(recipeObj);
     }
-    totalRecipes = recipes.length;
     recipes.sort((a, b) {return b.dateAdded.compareTo(a.dateAdded);});
     return recipes;
   }
