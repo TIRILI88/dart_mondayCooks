@@ -12,6 +12,14 @@ class FoodScrollContainer extends StatelessWidget {
   final String imagePath;
   final Function onTapNavigation;
 
+  String scoreEmoji(double score) {
+    if (score > 5) {
+      return '👌';
+  } else {
+      return '👇';
+  }
+}
+
   @override
   Widget build(BuildContext context) {
 
@@ -45,7 +53,7 @@ class FoodScrollContainer extends StatelessWidget {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text('👌',
+                                Text(scoreEmoji(scoreNumber),
                                     style: TextStyle(
                                         fontSize: 25
                                     )),
@@ -86,48 +94,45 @@ class FoodScrollContainer extends StatelessWidget {
                     height: 280,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: Hero(
-                        tag: 'recipePicture',
-                        child: FutureBuilder(
-                          future: DataBaseService().getImage(context, imagePath),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              return Container(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width / 1.2,
-                                height: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width / 0.8,
-                                child: snapshot.data,
-                              );
-                            }
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Container(
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width / 1.2,
-                                height: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width / 0.8,
-                                child: CircularProgressIndicator(
-                                ),
-                              );
-                            }
+                      child: FutureBuilder(
+                        future: DataBaseService().getImage(context, imagePath),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
                             return Container(
-                              child: Text('ERROR',
-                                style: TextStyle(
-                                    color: Colors.white
-                                ),),
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width / 1.2,
+                              height: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width / 0.8,
+                              child: snapshot.data,
                             );
-                          },
-                        ),
+                          }
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Container(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width / 1.2,
+                              height: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width / 0.8,
+                              child: CircularProgressIndicator(
+                              ),
+                            );
+                          }
+                          return Container(
+                            child: Text('ERROR',
+                              style: TextStyle(
+                                  color: Colors.white
+                              ),),
+                          );
+                        },
                       ),
                     ),
                   ),

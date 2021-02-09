@@ -25,48 +25,41 @@ class RecipePage extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: Hero(
-              tag: 'recipePicture',
-              child: FutureBuilder(
-                future: DataBaseService().getImage(context, recipe.recipeURL),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState ==
-                      ConnectionState.done) {
-                    return Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width / 1.2,
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .width / 0.8,
-                      child: snapshot.data,
-                    );
-                  }
-                  if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width / 1,
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .width / 1,
-                      child: CircularProgressIndicator(
-                      ),
-                    );
-                  }
+            child: FutureBuilder(
+              future: DataBaseService().getImage(context, recipe.recipeURL),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState ==
+                    ConnectionState.done) {
                   return Container(
-                    child: Text('ERROR',
-                      style: TextStyle(
-                          color: Colors.white
-                      ),),
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 0.8,
+                    child: snapshot.data,
                   );
-                },
-              ),
+                }
+                if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return Container(
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 1,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .width / 1,
+                    child: CircularProgressIndicator(
+                    ),
+                  );
+                }
+                return Container(
+                  child: Text('ERROR',
+                    style: TextStyle(
+                        color: Colors.white
+                    ),),
+                );
+              },
             ),
           ),
           SlidingUpPanel(
@@ -96,7 +89,7 @@ class RecipePage extends StatelessWidget {
                         color: Colors.orangeAccent,
                         borderRadius: BorderRadius.circular(10)
                     ),
-                    child: Text('45 MIN', //${recipe.cookTime}
+                    child: Text('${recipe.cookTime} MIN',
                         style: TextStyle(
                             color: Color(0xFF212121),
                             fontSize: 20,

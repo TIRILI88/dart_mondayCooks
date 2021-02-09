@@ -107,9 +107,7 @@ class _UserLoginState extends State<UserLogin> {
                                 final user = await _auth.signInWithEmailAndPassword(
                                     email: email, password: password);
                                 if (user != null) {
-                                   DataBaseService().userName(name);
                                   Navigator.of(context).pushNamedAndRemoveUntil('/tabsPage', (Route<dynamic> route) => false);
-                                  // Navigator.push(context, StartPage());
                                 }
                               }
                               catch (e) {

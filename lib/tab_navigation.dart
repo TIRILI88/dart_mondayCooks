@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:monday_cooks/favorites_page.dart';
 import 'package:monday_cooks/search_page.dart';
 import 'package:monday_cooks/start_page.dart';
+import 'package:monday_cooks/test_startpage.dart';
 import 'package:monday_cooks/upload_page.dart';
 import 'package:monday_cooks/user_login.dart';
 import 'package:monday_cooks/user_page.dart';
@@ -40,7 +41,7 @@ class TabNavigationItem {
 
   static List<TabNavigationItem> get items => [
     TabNavigationItem(
-        page: StartPage(),
+        page: StartPage(), //TestStartPage()
         title: 'Home',
         icon: Icon(FontAwesomeIcons.home)),
     TabNavigationItem(

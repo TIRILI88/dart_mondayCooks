@@ -1,13 +1,13 @@
 // import 'SEARCH-BAR';
 import 'package:flutter/material.dart';
-import 'package:monday_cooks/default_data.dart';
+import 'package:monday_cooks/recipe_class.dart';
 import 'package:monday_cooks/recipe_page.dart';
 import 'database.dart';
 import 'dish_container.dart';
 import 'scroll_container.dart';
 import 'constants.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'category_class.dart';
+import 'user_data.dart';
 
 
 class StartPage extends StatefulWidget {
@@ -15,20 +15,33 @@ class StartPage extends StatefulWidget {
   _StartPageState createState() => _StartPageState();
 }
 
-
 class _StartPageState extends State<StartPage> {
 
-  final recipes = FirebaseFirestore.instance.collection('recipes').get();
+  List<Recipe> recipes;
+  List<Recipe> filteredRecipes;
+  List<Category> categories;
+  List<UserData> user;
 
-  User loggedInUser;
-  String documentId;
-  String userName = 'There';
+  @override
+  void initState() {
+    super.initState();
+    DataBaseService().getCurrentUser().then((userFromServer) {
+      setState(() {user = userFromServer;});
+    });
+    DataBaseService().getCategories().then((categoriesFromServer){
+      setState(() {categories = categoriesFromServer;});
+    });
+    DataBaseService().getRecipes().then((recipesFromServer) {
+      setState(() {
+        recipes = recipesFromServer;
+        filteredRecipes = recipes;
+      });
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
-  setState(() {
-    userName = DefaultData.userName;
-  });
     return Scaffold(
         body: Stack(
           alignment: Alignment.topCenter,
@@ -42,13 +55,18 @@ class _StartPageState extends State<StartPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    // crossAxisAlignment: CrossAxisAlignment.baseline,
                     children: [
-                      // GetUserName(),
-
-                      //// *****
-                      Text('Hi $userName,',
-                        style: kWelcomeTextField
+                      FutureBuilder(
+                          future: DataBaseService().getCurrentUser(),
+                          builder: (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.data == null) {
+                              return Text('Hi There!',
+                              style: kWelcomeTextField);
+                            } else {
+                              return Text('Hi ${snapshot.data[0].userName}',
+                              style: kWelcomeTextField);
+                           }
+                        }
                       ),
                       Text('I hope you are in the mood to cook!',
                         style: TextStyle(
@@ -58,7 +76,7 @@ class _StartPageState extends State<StartPage> {
                         ),),
                       SizedBox(height: 20),
                       Divider(
-                          color: kColorContainer
+                          color: Colors.grey
                       )
                     ],
                   ),
@@ -71,7 +89,7 @@ class _StartPageState extends State<StartPage> {
                       textBaseline: TextBaseline.alphabetic,
                       children: [
                         Text(
-                          'New dishes',
+                          'Total dishes',
                           style: TextStyle(
                             fontSize: 35,
                             fontWeight: FontWeight.bold
@@ -79,7 +97,7 @@ class _StartPageState extends State<StartPage> {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          '42',
+                          filteredRecipes.length.toString(),
                           style: TextStyle(
                               color: Colors.orangeAccent,
                               fontSize: 20
@@ -88,54 +106,46 @@ class _StartPageState extends State<StartPage> {
                   ),
                 ),
                 // Dish Category Slider
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child:
-                    Row(
-                      children: [
-                        DishContainer(dish: 'Main Dishes'),
-                        DishContainer(dish: 'Desserts'),
-                        DishContainer(dish: 'Fish'),
-                        DishContainer(dish: 'Pasta')
-                      ]
-                ),
+                Container(
+                  height: 100,
+                  child: Expanded(
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categories.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return DishContainer(
+                            category: categories[index].category,
+                            onTap: () {
+                              setState(() {
+                                filteredRecipes = recipes.where((r) => r.category.contains(categories[index].category)).toList();
+                              });
+                            },
+                          );
+                        }
+                    ),
+                  ),
                 ),
                 SizedBox(height: 20),
                 // *** SEARCHBAR FOR LATER USE
                 // SearchBar(onSearch: onSearch, onItemFound: onItemFound),
                 // Recipe Container Slider
                 Expanded(child:
-                    FutureBuilder(
-                      future: DataBaseService().getRecipes(),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        if (snapshot.data == null) {
-                          return Container(
-                            child: Text('Loading ....',
-                            style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.white,)
-                          ));
-                        } else {
-                        return ListView.builder(
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (BuildContext context, int index){
-                          return FoodScrollContainer(
-                            recipeName: snapshot.data[index].recipeName,
-                            scoreNumber: 4.5,//snapshot.data[index].recipeScore,
-                            cookingTime: 35, //snapshot.data[index].cookTime,
-                            imagePath: snapshot.data[index].recipeURL,
-                            onTapNavigation: () {
-                              Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => RecipePage(recipe: snapshot.data[index])));
-                            },
-                          );
-                          });
-                        }
-                      },
-                    )
-
-
-                        ),
+                ListView.builder(
+                    itemCount: filteredRecipes.length,
+                    itemBuilder: (BuildContext context, int index){
+                      return FoodScrollContainer(
+                        recipeName: filteredRecipes[index].recipeName,
+                        scoreNumber: filteredRecipes[index].recipeScore,
+                        cookingTime: filteredRecipes[index].cookTime,
+                        imagePath: filteredRecipes[index].recipeURL,
+                        onTapNavigation: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => RecipePage(recipe: filteredRecipes[index])));
+                        },
+                      );
+                    }),
+                  ),
                 ],
             ),
         ]),

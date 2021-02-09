@@ -2,18 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:monday_cooks/constants.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:monday_cooks/category_class.dart';
 import 'recipe_class.dart';
 import 'default_data.dart';
+import 'user_data.dart';
 
-String userDocumentID;
 
 class DataBaseService {
 
   final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+  String currentUser;
+  int totalRecipes = 0;
+
 
   Future<void> userName(userName) async {
-    final CollectionReference user = FirebaseFirestore.instance.collection('users');
+    final CollectionReference user = _firestore.collection('users');
     final uid = await _auth.currentUser.uid;
     DocumentReference userDataRef = await user.add({
       'userName': userName,
@@ -22,7 +27,7 @@ class DataBaseService {
     print('Doc Id from userName Func: ${userDataRef.id}');
     DefaultData.documentId = userDataRef.id;
     DefaultData.userName = userName;
-    getUserIDQuery();
+    UserData(userName, uid);
   }
 
   Future<Widget> getImage(BuildContext context, String imageName) async {
@@ -39,51 +44,72 @@ class DataBaseService {
     Reference firebaseStorageRef = FirebaseStorage.instance.ref().child(
         'images/$fileName');
     firebaseStorageRef.putFile(image);
-    // final downloadURL = await FirebaseStorage.instance.ref().child('images').child(fileName).getDownloadURL();
 
-    return fileName; //downloadURL;
+    return fileName;
   }
 
   Future uploadRecipe(String category, String recipeName, String ingredients,
       image, int cookTime, double recipeScore, String recipeText) async {
-    final CollectionReference recipesCollection = FirebaseFirestore.instance
-        .collection('recipes');
-    final uid = await _auth.currentUser.uid;
+    final CollectionReference recipesCollection = _firestore.collection('recipes');
+    final uid = _auth.currentUser.uid;
     final imageURL = await uploadImage(image);
+    final dateAdded = (DateTime.now()).toString();
+    print('CurrentUser: $currentUser');
 
     return await recipesCollection.add({
       'userID': uid,
-      'category': category,
+      'category': 'All, $category',
       'recipeName': recipeName,
       'imageURL': imageURL,
       'ingredients': ingredients,
       'cookTime': cookTime,
       'recipeScore': recipeScore,
-      'recipeText': recipeText
+      'recipeText': recipeText,
+      'dateAdded': dateAdded,
+      'addingUser': currentUser,
     });
   }
 
-  Future<List<Recipe>> getRecipes() async {
-    print('getRecipes() started');
 
-    final recipesData = await FirebaseFirestore.instance.collection('recipes').get();
+  Future<List<Recipe>> getRecipes() async {
+    final recipesData = await _firestore.collection('recipes').get();
     List<Recipe> recipes = [];
     for(var recipe in recipesData.docs) {
-      Recipe recipeObj = Recipe(recipe['recipeName'], recipe['imageURL'], recipe['category'], recipe['recipeText']); //, recipe['cookTime'], recipe['recipeScore'],
+      Recipe recipeObj = Recipe(recipe['recipeName'], recipe['imageURL'], recipe['recipeScore'].toDouble(), recipe['cookTime'].toInt(), recipe['category'], recipe['recipeText'], recipe['dateAdded']); //,
       recipes.add(recipeObj);
     }
-    print(recipes.length);
+    totalRecipes = recipes.length;
+    recipes.sort((a, b) {return b.dateAdded.compareTo(a.dateAdded);});
     return recipes;
   }
 
 
-  getUserIDQuery() {
-    final userId = FirebaseFirestore.instance
-        .collection('users')
-        .where('userID', isEqualTo: _auth.currentUser.uid)
-        .get();
-    print(userId);
+  Future<List<Category>> getCategories() async {
+    final categoryData = await _firestore.collection('categories').get();
+    List<Category> categoriesList = [];
+    for(var category in categoryData.docs) {
+      Category categoryObj = Category(category['category']);
+      categoriesList.add(categoryObj);
+    }
+    categoriesList.sort((a, b) {return a.category.compareTo(b.category);});
+    return categoriesList;
   }
+
+  Future<List<UserData>> getCurrentUser() async {
+    List<UserData> userDataList = [];
+    if (_auth.currentUser != null){
+       final userId = await _firestore.collection('users')
+           .where('userID', isEqualTo: _auth.currentUser.uid)
+           .get();
+       for (var user in userId.docs) {
+         UserData userObj = UserData(user['userName'], user['userID']);
+         userDataList.add(userObj);
+       }
+     } else {
+       userDataList.add(UserData('There', 'XXXXXXXXXX'));
+     }
+     return userDataList;
+    }
 }
 
 
@@ -95,40 +121,3 @@ class FireStorageService extends ChangeNotifier {
   }
 }
 
-class GetUserName extends StatelessWidget {
-  GetUserName({@required this.documentId});
-
-  final String documentId;
-
-  @override
-  Widget build(BuildContext context) {
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
-    final _auth = FirebaseAuth.instance;
-    print('DocID from GetUserNameClass $documentId');
-
-      if (_auth.currentUser != null && documentId != null) {
-        return FutureBuilder<DocumentSnapshot>(
-          future: users.doc(documentId).get(),
-          builder:
-              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-            if (snapshot.hasError) {
-              return Text("Something went wrong");
-            }
-
-            if (snapshot.connectionState == ConnectionState.done) {
-              Map<String, dynamic> data = snapshot.data.data();
-              print(data['userName']);
-              return Text("Hi ${data['userName']},",
-                  style: kWelcomeTextField);
-            }
-
-            return Text("loading");
-          },
-        );
-      } else {
-        return Text('Hi There',
-          style: kWelcomeTextField,
-        );
-      }
-  }
-}
