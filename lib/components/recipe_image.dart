@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'database.dart';
+import '../database.dart';
 
 class RecipeImageWidget extends StatelessWidget {
   RecipeImageWidget({@required this.imageName});

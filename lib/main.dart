@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'start_page.dart';
-import 'tabs_page.dart';
-import 'user_login.dart';
+import 'package:monday_cooks/screens/start_page.dart';
+import 'navigation/tabs_page.dart';
+import 'screens/user_login.dart';
 import 'constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';

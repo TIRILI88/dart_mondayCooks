@@ -4,9 +4,9 @@ import 'package:monday_cooks/constants.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:monday_cooks/dialog_box.dart';
-import 'database.dart';
-import 'constants.dart';
+import 'package:monday_cooks/components/dialog_box.dart';
+import 'package:monday_cooks/database.dart';
+import 'package:monday_cooks/constants.dart';
 import 'dart:io';
 
 

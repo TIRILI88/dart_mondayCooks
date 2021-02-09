@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'default_data.dart';
+import '../classes/default_data.dart';
 
 
 class UserPage extends StatefulWidget {

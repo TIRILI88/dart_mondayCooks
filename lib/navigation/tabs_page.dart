@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:monday_cooks/tab_navigation.dart';
+import 'package:monday_cooks/navigation/tab_navigation.dart';
 
 class TabsPage extends StatefulWidget {
   @override

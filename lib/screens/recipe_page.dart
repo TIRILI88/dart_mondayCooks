@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:monday_cooks/constants.dart';
-import 'package:monday_cooks/recipe_image.dart';
+import 'package:monday_cooks/components/recipe_image.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:monday_cooks/tab_widget.dart';
-import 'package:monday_cooks/recipe_class.dart';
+import 'package:monday_cooks/navigation/tab_widget.dart';
+import 'package:monday_cooks/classes/recipe_class.dart';
 
 class RecipePage extends StatelessWidget {
   RecipePage({this.recipe});

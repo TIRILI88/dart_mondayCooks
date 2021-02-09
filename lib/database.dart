@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:monday_cooks/category_class.dart';
-import 'recipe_class.dart';
-import 'default_data.dart';
-import 'user_data.dart';
+import 'package:monday_cooks/classes/category_class.dart';
+import 'package:monday_cooks/classes/recipe_class.dart';
+import 'classes/default_data.dart';
+import 'classes/user_data_class.dart';
 
 
 class DataBaseService {

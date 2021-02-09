@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:monday_cooks/debouncer_class.dart';
-import 'package:monday_cooks/recipe_class.dart';
-import 'package:monday_cooks/recipe_page.dart';
-import 'database.dart';
-import 'dish_container.dart';
-import 'scroll_container.dart';
-import 'constants.dart';
-import 'category_class.dart';
-import 'user_data.dart';
+import 'package:monday_cooks/classes/debouncer_class.dart';
+import 'package:monday_cooks/classes/recipe_class.dart';
+import 'package:monday_cooks/screens/recipe_page.dart';
+import 'package:monday_cooks/classes/category_class.dart';
+import 'package:monday_cooks/database.dart';
+import 'package:monday_cooks/components/dish_container.dart';
+import 'package:monday_cooks/components/scroll_container.dart';
+import 'package:monday_cooks/constants.dart';
+import 'package:monday_cooks/classes/user_data_class.dart';
 import 'dart:math';
 
 
