@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:monday_cooks/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:monday_cooks/classes/default_data.dart';
 import 'package:monday_cooks/components/dialog_box.dart';
 import 'package:monday_cooks/constants.dart';
 import 'package:monday_cooks/components/rounded_button.dart';
+import 'package:monday_cooks/classes/user_data_class.dart';
 
 
 class UserLogin extends StatefulWidget {
@@ -91,7 +91,7 @@ class _UserLoginState extends State<UserLogin> {
                       height: 24.0,
                     ),
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         RoundedButton(
                             text: 'Log In',
@@ -106,6 +106,7 @@ class _UserLoginState extends State<UserLogin> {
                                 final user = await _auth.signInWithEmailAndPassword(
                                     email: email, password: password);
                                 if (user != null) {
+                                  DataBaseService().getCurrentUser();
                                   Navigator.of(context).pushNamedAndRemoveUntil('/tabsPage', (Route<dynamic> route) => false);
                                 }
                               }
@@ -118,9 +119,9 @@ class _UserLoginState extends State<UserLogin> {
                                 });
                               }
                             }),
-                        SizedBox(
-                          width: 22.0,
-                        ),
+                        // SizedBox(
+                        //   width: .0,
+                        // ),
                         RoundedButton(
                             text: 'Sign Up',
                             color: Colors.orangeAccent,
@@ -134,10 +135,8 @@ class _UserLoginState extends State<UserLogin> {
                                 final user = await _auth.createUserWithEmailAndPassword(
                                     email: email, password: password);
                                 if (user != null) {
-                                  DataBaseService().userName(name);
-                                  setState(() {
-                                    DefaultData.userName = name;
-                                  });
+                                  await DataBaseService().userName(name);
+                                  await DataBaseService().getCurrentUser();
                                   Navigator.of(context).pushNamedAndRemoveUntil('/tabsPage', (Route<dynamic> route) => false);
                                 }
                               }

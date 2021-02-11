@@ -1,9 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:monday_cooks/constants.dart';
 import 'package:monday_cooks/components/recipe_image.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:monday_cooks/navigation/tab_widget.dart';
+import 'package:monday_cooks/components/tab_widget.dart';
 import 'package:monday_cooks/classes/recipe_class.dart';
 
 class RecipePage extends StatelessWidget {
@@ -12,8 +13,8 @@ class RecipePage extends StatelessWidget {
   final Recipe recipe;
   final double tabBarHeight = 80;
   final panelController = PanelController();
+  List<String> ingredientsList;
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +52,7 @@ class RecipePage extends StatelessWidget {
             body: TabBarView(
               children: [
                 TabWidget(scrollController: scrollController, textValue: recipe.recipeText),
-                TabWidget(scrollController: scrollController, textValue: recipe.ingredients,)
+                // TabWidget(scrollController: scrollController, textValue: recipe.ingredients),
               ],
             ),
           ));

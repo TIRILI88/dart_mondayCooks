@@ -8,9 +8,10 @@ class Recipe {
   final String category;
   final String recipeText;
   final String dateAdded;
-  final String ingredients;
+  final List ingredients;
+  final String userID;
 
+  Recipe(this.recipeName, this.recipeURL, this.recipeScore, this.cookTime, this.category, this.recipeText, this.dateAdded, this.ingredients, this.userID);
 
-  Recipe(this.recipeName, this.recipeURL, this.recipeScore, this.cookTime, this.category, this.recipeText, this.dateAdded, this.ingredients);
 
 }

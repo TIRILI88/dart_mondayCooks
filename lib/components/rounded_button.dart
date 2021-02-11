@@ -15,8 +15,8 @@ class RoundedButton extends StatelessWidget {
       elevation: 5.0,
       child: MaterialButton(
         onPressed: onPressed,
-        minWidth: 180.0,
-        height: 42.0,
+        minWidth: 160.0,
+        height: 45.0,
         child: Text(
           text,
           style: TextStyle(

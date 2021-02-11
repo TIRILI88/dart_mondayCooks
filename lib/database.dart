@@ -12,7 +12,17 @@ class DataBaseService {
 
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
-  String currentUser;
+  List<UserData> user;
+
+
+
+  makeList(String stringList) {
+    List<String> ingredientsList = [];
+    for (var item in stringList.split(', ')) {
+      ingredientsList.add(item.toString());
+    }
+    return ingredientsList;
+  }
 
   Future<void> userName(userName) async {
     final CollectionReference user = _firestore.collection('users');
@@ -21,10 +31,6 @@ class DataBaseService {
       'userName': userName,
       'userID': uid,
     });
-    print('Doc Id from userName Func: ${userDataRef.id}');
-    DefaultData.documentId = userDataRef.id;
-    DefaultData.userName = userName;
-    UserData(userName, uid);
   }
 
   Future<Widget> getImage(BuildContext context, String imageName) async {
@@ -50,7 +56,7 @@ class DataBaseService {
     final uid = _auth.currentUser.uid;
     final imageURL = await uploadImage(image);
     final dateAdded = (DateTime.now()).toString();
-    print('CurrentUser: $currentUser');
+
 
     return await recipesCollection.add({
       'userID': uid,
@@ -62,7 +68,7 @@ class DataBaseService {
       'recipeScore': recipeScore,
       'recipeText': recipeText,
       'dateAdded': dateAdded,
-      'addingUser': currentUser,
+      'addingUser': user[0].userName,
     });
   }
 
@@ -72,7 +78,7 @@ class DataBaseService {
     List<Recipe> recipes = [];
     for(var recipe in recipesData.docs) {
       Recipe recipeObj = Recipe(recipe['recipeName'], recipe['imageURL'], recipe['recipeScore'].toDouble(), recipe['cookTime'].toInt(),
-          recipe['category'], recipe['recipeText'], recipe['dateAdded'], recipe['ingredients']); //,
+          recipe['category'], recipe['recipeText'], recipe['dateAdded'], makeList(recipe['ingredients']), recipe['userID']); //,
       recipes.add(recipeObj);
     }
     recipes.sort((a, b) {return b.dateAdded.compareTo(a.dateAdded);});
@@ -98,11 +104,11 @@ class DataBaseService {
            .where('userID', isEqualTo: _auth.currentUser.uid)
            .get();
        for (var user in userId.docs) {
-         UserData userObj = UserData(user['userName'], user['userID']);
+         UserData userObj = UserData(userName: user['userName'], userID: user['userID']);
          userDataList.add(userObj);
        }
      } else {
-       userDataList.add(UserData('There', 'XXXXXXXXXX'));
+       userDataList.add(UserData(userName: 'There',userID: 'XXXXXXXXXX'));
      }
      return userDataList;
     }

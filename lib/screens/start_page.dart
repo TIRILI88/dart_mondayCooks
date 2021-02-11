@@ -9,6 +9,7 @@ import 'package:monday_cooks/components/scroll_container.dart';
 import 'package:monday_cooks/constants.dart';
 import 'package:monday_cooks/classes/user_data_class.dart';
 import 'dart:math';
+import 'test_recipe_page.dart';
 
 
 class StartPage extends StatefulWidget {
@@ -24,7 +25,6 @@ class _StartPageState extends State<StartPage> {
   List<UserData> user;
   final _debouncer = Debouncer(millisenconds: 500);
   Random random = Random();
-  // int randInt = ;
 
   @override
   void initState() {
@@ -84,9 +84,9 @@ class _StartPageState extends State<StartPage> {
                               filteredRecipes = recipes.where((r) =>
                               (r.category.toLowerCase().contains(string.toLowerCase()) ||
                                   r.recipeText.toLowerCase().contains(string.toLowerCase()) ||
-                                  r.recipeName.toLowerCase().contains(string.toLowerCase()) ||
-                                  r.ingredients.toLowerCase().contains(string.toLowerCase()))
-                              ).toList();
+                                  r.recipeName.toLowerCase().contains(string.toLowerCase())
+                                  // r.ingredients.toLowerCase().contains(string.toLowerCase()))
+                              )).toList();
                             });
                           });
                       },
@@ -106,8 +106,7 @@ class _StartPageState extends State<StartPage> {
                         ),
                       ),
                       SizedBox(width: 20),
-                      Text(
-                        filteredRecipes.length.toString(),
+                      Text((filteredRecipes.length != null) ? filteredRecipes.length.toString() : '0',
                         style: TextStyle(
                             color: Colors.orangeAccent,
                             fontSize: 20
@@ -139,7 +138,7 @@ class _StartPageState extends State<StartPage> {
                 // Recipe Container Slider
                 Expanded(child:
                 ListView.builder(
-                    itemCount: filteredRecipes.length,
+                    itemCount: (recipes != null) ? filteredRecipes.length : 1,
                     itemBuilder: (BuildContext context, int index){
                       return FoodScrollContainer(
                         recipeName: filteredRecipes[index].recipeName,
@@ -148,7 +147,7 @@ class _StartPageState extends State<StartPage> {
                         imagePath: filteredRecipes[index].recipeURL,
                         onTapNavigation: () {
                           Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => RecipePage(recipe: filteredRecipes[index])));
+                              MaterialPageRoute(builder: (context) => TestRecipePage(recipe: filteredRecipes[index])));
                         },
                       );
                     }),

@@ -108,8 +108,8 @@ class FoodScrollContainer extends StatelessWidget {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
                             return Container(
-                              width: MediaQuery.of(context).size.width / 1.2,
-                              height: MediaQuery.of(context).size.width / 0.8,
+                              width: 100,
+                              height: 100,
                               child: CircularProgressIndicator(
                               ),
                             );
