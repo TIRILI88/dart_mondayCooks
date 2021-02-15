@@ -15,18 +15,23 @@ class RecipeImageWidget extends StatelessWidget {
             future: DataBaseService().getImage(context, imageName),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                return Center(
-                  child: Container(
-                    height: MediaQuery.of(context).size.width,
-                    child: snapshot.data,
+                return ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  child: Center(
+                    child: Container(
+                      height: MediaQuery.of(context).size.width * 0.66,
+                      child: snapshot.data,
+                    ),
                   ),
                 );
               }
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container(
-                  width: MediaQuery.of(context).size.width / 0.8,
-                  height: MediaQuery.of(context).size.width / 0.8,
-                  child: CircularProgressIndicator(
+                return Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 0.8,
+                    height: MediaQuery.of(context).size.width * 0.33,
+                    child: CircularProgressIndicator(
+                    ),
                   ),
                 );
               }

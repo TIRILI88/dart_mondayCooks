@@ -1,10 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:monday_cooks/classes/category_class.dart';
 import 'package:monday_cooks/classes/recipe_class.dart';
-import 'classes/default_data.dart';
 import 'classes/user_data_class.dart';
 
 
@@ -52,6 +52,9 @@ class DataBaseService {
 
   Future uploadRecipe(String category, String recipeName, String ingredients,
       image, int cookTime, double recipeScore, String recipeText) async {
+
+    print('Recipe upload called');
+
     final CollectionReference recipesCollection = _firestore.collection('recipes');
     final uid = _auth.currentUser.uid;
     final imageURL = await uploadImage(image);
@@ -68,7 +71,8 @@ class DataBaseService {
       'recipeScore': recipeScore,
       'recipeText': recipeText,
       'dateAdded': dateAdded,
-      'addingUser': user[0].userName,
+      'favorite' : '',
+      // 'addingUser': user[0].userName, ///TODO Adding User
     });
   }
 
@@ -78,7 +82,8 @@ class DataBaseService {
     List<Recipe> recipes = [];
     for(var recipe in recipesData.docs) {
       Recipe recipeObj = Recipe(recipe['recipeName'], recipe['imageURL'], recipe['recipeScore'].toDouble(), recipe['cookTime'].toInt(),
-          recipe['category'], recipe['recipeText'], recipe['dateAdded'], makeList(recipe['ingredients']), recipe['userID']); //,
+          recipe['category'], recipe['recipeText'], recipe['dateAdded'], makeList(recipe['ingredients']),
+          recipe['userID'], recipe.id, recipe['favorite']); //,
       recipes.add(recipeObj);
     }
     recipes.sort((a, b) {return b.dateAdded.compareTo(a.dateAdded);});
@@ -111,7 +116,24 @@ class DataBaseService {
        userDataList.add(UserData(userName: 'There',userID: 'XXXXXXXXXX'));
      }
      return userDataList;
+  }
+
+  getIngredientImage(fileName) {
+    var syncPath = 'images/ingredient_icons/${fileName.toLowerCase()}.png';
+    if (File(syncPath).exists() != null) {
+      return syncPath;
+    } else {
+      return 'images/ingredient_icons/carrot.png';
     }
+  }
+
+  addToFavorites(document, userID) {
+    print('addToFavorites called. DocID: $document');
+    _firestore.collection('recipes').doc(document).update({
+      'favorite': userID,
+    });
+    getRecipes();
+  }
 }
 
 

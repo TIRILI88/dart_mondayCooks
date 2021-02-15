@@ -19,10 +19,10 @@ class StartPage extends StatefulWidget {
 
 class _StartPageState extends State<StartPage> {
 
-  List<Recipe> recipes;
-  List<Recipe> filteredRecipes;
-  List<Category> categories;
-  List<UserData> user;
+  List<Recipe> recipes = [Recipe('Burger', 'images/default_recipe.jpeg', 5.5, 25, 'Main Dish', 'Recipe Text here', '1999-01-01 00:01:00.000000', ['Tomato', 'Meat', 'Bread'], '5mjTOzKjEfeYSk9Fz3NV030WpTo2', '', '')];
+  List<Recipe> filteredRecipes = [Recipe('Burger', 'images/default_recipe.jpeg', 5.5, 25, 'Main Dish', 'Recipe Text here', '1999-01-01 00:01:00.000000', ['Tomato', 'Meat', 'Bread'], '5mjTOzKjEfeYSk9Fz3NV030WpTo2', '', '')];
+  List<Category> categories = [Category('Main Dish')];
+  List<UserData> user = [UserData(userName: 'Test', userID: '')];
   final _debouncer = Debouncer(millisenconds: 500);
   Random random = Random();
 
@@ -138,7 +138,7 @@ class _StartPageState extends State<StartPage> {
                 // Recipe Container Slider
                 Expanded(child:
                 ListView.builder(
-                    itemCount: (recipes != null) ? filteredRecipes.length : 1,
+                    itemCount: (recipes != null) ? filteredRecipes.length : 5,
                     itemBuilder: (BuildContext context, int index){
                       return FoodScrollContainer(
                         recipeName: filteredRecipes[index].recipeName,

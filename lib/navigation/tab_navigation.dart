@@ -6,7 +6,7 @@ import 'package:monday_cooks/screens/upload_page.dart';
 import 'package:monday_cooks/screens/user_login.dart';
 import 'package:monday_cooks/screens/user_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'globals.dart' as globals;
+
 
 User user;
 bool isLoggedIn = false;
@@ -15,22 +15,6 @@ class TabNavigationItem {
   final Widget page;
   final String title;
   final Widget icon;
-
-
-  static Widget isUserLoggedIn() {
-    try {
-      final User user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        isLoggedIn = true;
-        return UserPage();
-      } else {
-        return UserLogin();
-      }
-    }
-    catch (e) {
-      print(e);
-    }
-  }
 
 
   TabNavigationItem(
@@ -42,11 +26,11 @@ class TabNavigationItem {
         title: 'Home',
         icon: Icon(FontAwesomeIcons.home)),
     TabNavigationItem(
-        page: UploadPage(),
+        page: (FirebaseAuth.instance.currentUser != null) ? UploadPage() : UserLogin(),
         title: 'Add Recipe',
         icon: Icon(FontAwesomeIcons.plusCircle)),
     TabNavigationItem(
-        page: isUserLoggedIn(),
+        page: (FirebaseAuth.instance.currentUser != null) ? UserPage() : UserLogin(),
         title: 'Me',
         icon: Icon(FontAwesomeIcons.userCircle)),
   ];

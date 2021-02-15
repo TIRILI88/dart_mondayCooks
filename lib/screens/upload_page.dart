@@ -232,15 +232,15 @@ class _UploadPageState extends State<UploadPage> {
                              catch (e) {
                               DialogAlert(message: e.toString());
                             }
-
                             categoryTextController.clear();
                             recipeTextController.clear();
                             ingredientTextController.clear();
                             scoreTextController.clear();
                             cookTimeTextController.clear();
-                            // recipeTextController.clear();
+                            recipeTextController.clear();
                             setState(() {
                               showSpinner = false;
+                              dropdownValue = 'Category';
                             });
                             }),
                       )
