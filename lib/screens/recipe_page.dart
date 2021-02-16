@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:monday_cooks/constants.dart';
 import 'package:monday_cooks/components/recipe_image.dart';
-import 'package:monday_cooks/database.dart';
-import 'package:monday_cooks/navigation/tab_navigation.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:monday_cooks/components/tab_widget.dart';
 import 'package:monday_cooks/classes/recipe_class.dart';

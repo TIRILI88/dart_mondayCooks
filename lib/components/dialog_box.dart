@@ -13,12 +13,12 @@ class DialogAlert extends StatelessWidget {
           child: ListBody(
             children: <Widget>[
               Text(message),
-              ],
-              ),
-              ),
-              actions: <Widget>[
+            ],
+          ),
+        ),
+        actions: <Widget>[
               TextButton(
-                child: Text('Approve'),
+                child: Text('OK'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:monday_cooks/components/future_builder_images.dart';
 import 'package:monday_cooks/components/scroll_container.dart';
 import 'package:monday_cooks/constants.dart';
 import 'package:monday_cooks/classes/user_data_class.dart';
@@ -44,103 +45,121 @@ class _UserPageState extends State<UserPage> {
       body: SafeArea(
         child: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Your Recipes, ${user[0].userName} ', //
+            Column(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
+                    child: Text('Your Recipes, ${user[0].userName} ', //
                     style: kWelcomeTextField.copyWith(fontSize: 22),),
-                    TextButton(
-                      style: TextButton.styleFrom(
-                        primary: Colors.orangeAccent,
-                      ),
-                        child: Icon(FontAwesomeIcons.signOutAlt),
-                        onPressed: () {
-                          _auth.signOut();
-                          Navigator.pushNamed(context, '/tabsPage');
-                        },
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      primary: Colors.orangeAccent,
                     ),
-                  ],
-                ),
-                Expanded(
-                    child: ListView.builder(
-                      padding: EdgeInsets.all(10.0),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: (recipes != null) ? userRecipes.length : 1,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Container(
+                      child: Icon(FontAwesomeIcons.signOutAlt),
+                      onPressed: () {
+                        _auth.signOut();
+                        Navigator.pushNamed(context, '/tabsPage');
+                      },
+                  )]),
+              Container(
+                height: 150,
+                  child: ListView.builder(
+                    padding: EdgeInsets.all(10.0),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: (recipes != null) ? userRecipes.length : 1,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => TestRecipePage(recipe: userRecipes[index])));
+                          },
+                          child: Container(
                             width: 200,
                             child: Card(
-                              child: Padding(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0)
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20.0),
+                                  child: FutureBuilderImages(userRecipes[index].recipeURL)
+                              )
+                              /*
+                              Padding(
                                 padding: EdgeInsets.all(10.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Text(userRecipes[index].recipeName,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
-                                    ),),
-                                    SizedBox(height: 5.0,),
-                                    Text(userRecipes[index].recipeScore.toString(),
+                                    // -- Left Side
+                                    Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(userRecipes[index].recipeName,
                                       style: TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 16,
                                         color: Colors.grey,
                                       ),),
-                                  ],
-                                ),
+                                      SizedBox(height: 5.0,),
+                                      Text(userRecipes[index].recipeScore.toString(),
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.grey,
+                                        ))]),
+                                    // -- Right Side
+                                    // Flexible(
+                                    //   child: Container(
+                                    //     height: 80,
+                                    //     width: 80,
+                                    //     child: FutureBuilderImages(userRecipes[index].recipeURL),
+                                    //   ),
+                                    // )
+                                ]),
                               ),
+                              */
                             ),
+                          ),
+                        );
+                      }
+              ),
+              ),
+              SizedBox(height: 30),
+              Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
+                    child: Text('Your Favorites',
+                      style: kWelcomeTextField.copyWith(fontSize: 22),
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: favoriteRecipes.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return FoodScrollContainer(
+                            recipeName: favoriteRecipes[index].recipeName,
+                            scoreNumber: favoriteRecipes[index].recipeScore,
+                            cookingTime: favoriteRecipes[index].cookTime,
+                            imagePath: favoriteRecipes[index].recipeURL,
+                              onTapNavigation: () {
+                                Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => TestRecipePage(recipe: favoriteRecipes[index])));
+                              },
                           );
                         }
+                    ),
+                  )
+                ],
+              ),
                 ),
-                ),
-                Expanded(
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text('Your Favorites',
-                        textAlign: TextAlign.left,
-                        style: kWelcomeTextField.copyWith(fontSize: 22),
-                      ),
-                      Expanded(
-                        child: ListView.builder(
-                          scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemCount: favoriteRecipes.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return FoodScrollContainer(
-                                recipeName: favoriteRecipes[index].recipeName,
-                                scoreNumber: favoriteRecipes[index].recipeScore,
-                                cookingTime: favoriteRecipes[index].cookTime,
-                                imagePath: favoriteRecipes[index].recipeURL,
-                                  onTapNavigation: () {
-                                  MaterialPageRoute(builder: (context) => TestRecipePage(recipe: favoriteRecipes[index],));
-                                  },
-                              );
-                            }
-                            /*
-                            recipeName: filteredRecipes[index].recipeName,
-                          scoreNumber: filteredRecipes[index].recipeScore,
-                          cookingTime: filteredRecipes[index].cookTime,
-                          imagePath: filteredRecipes[index].recipeURL,
-                          onTapNavigation: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => TestRecipePage(recipe: filteredRecipes[index])));
-                          },
-                             */
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                  ),
-              ]),
-            )
+            ])
           ] //
         ),
       ),

@@ -28,8 +28,9 @@ class RecipeImageWidget extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                   child: Container(
-                    width: MediaQuery.of(context).size.width / 0.8,
-                    height: MediaQuery.of(context).size.width * 0.33,
+                    alignment: Alignment.center,
+                    width: 100, //MediaQuery.of(context).size.width / 0.8,
+                    height: 100, //MediaQuery.of(context).size.width * 0.33,
                     child: CircularProgressIndicator(
                     ),
                   ),

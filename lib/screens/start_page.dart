@@ -21,9 +21,10 @@ class _StartPageState extends State<StartPage> {
 
   List<Recipe> recipes = [Recipe('Burger', 'images/default_recipe.jpeg', 5.5, 25, 'Main Dish', 'Recipe Text here', '1999-01-01 00:01:00.000000', ['Tomato', 'Meat', 'Bread'], '5mjTOzKjEfeYSk9Fz3NV030WpTo2', '', '')];
   List<Recipe> filteredRecipes = [Recipe('Burger', 'images/default_recipe.jpeg', 5.5, 25, 'Main Dish', 'Recipe Text here', '1999-01-01 00:01:00.000000', ['Tomato', 'Meat', 'Bread'], '5mjTOzKjEfeYSk9Fz3NV030WpTo2', '', '')];
-  List<Category> categories = [Category('Main Dish')];
+  List<Category> categories = [Category('Main Dish', false)];
   List<UserData> user = [UserData(userName: 'Test', userID: '')];
   final _debouncer = Debouncer(millisenconds: 500);
+  bool isActive = false;
   Random random = Random();
 
   @override
@@ -123,13 +124,24 @@ class _StartPageState extends State<StartPage> {
                       scrollDirection: Axis.horizontal,
                       itemCount: categories.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return DishContainer(
-                          category: categories[index].category,
+                        return GestureDetector(
                           onTap: () {
                             setState(() {
-                              filteredRecipes = recipes.where((r) => r.category.contains(categories[index].category)).toList();
+                              isActive = true;
+                              print(isActive);
                             });
                           },
+                          child: DishContainer(
+                            category: categories[index].category,
+                            isActive: categories[index].isActive = isActive,
+                            onTap: () {
+                              setState(() {
+                                filteredRecipes = recipes.where((r) => r.category.contains(categories[index].category)).toList();
+                                DishContainer().isActiveColor = Colors.orangeAccent;
+                                // categories[index].isActive = true; ///TODO Set Active Color
+                              });
+                            },
+                          ),
                         );
                       }
                   ),

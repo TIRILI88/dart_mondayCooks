@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:monday_cooks/constants.dart';
 import 'package:monday_cooks/components/recipe_image.dart';
@@ -5,6 +6,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:monday_cooks/classes/recipe_class.dart';
 import 'package:monday_cooks/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:monday_cooks/screens/edit_page.dart';
 
 ///TODO Refactor to RecipePage - Delete original RecipePage
 class TestRecipePage extends StatelessWidget {
@@ -24,6 +26,17 @@ class TestRecipePage extends StatelessWidget {
         appBar: AppBar(
           title: Text(recipe.recipeName),
           actions: [
+            ///TODO Decision: Edit TextButton - Appbar Icon
+            ((_auth.currentUser.uid == recipe.userID)
+                ? IconButton(
+                  iconSize: 30,
+                  icon: Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => EditPage()));
+                  },) ///TODO Create edit function
+                : Container()
+            ),
             Padding(
                 padding: EdgeInsets.only(right: 20.0),
                 child: IconButton(
@@ -39,12 +52,21 @@ class TestRecipePage extends StatelessWidget {
             children: [
               Column(
                 children: [
+                 /*
+                  ((_auth.currentUser.uid == recipe.userID)
+                      ? TextButton(
+                        onPressed: () {},
+                        child: Text('Edit'))
+                      : Container()
+                  ),
+                  */
                   // Recipe Picture
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        child: RecipeImageWidget(imageName: recipe.recipeURL)),
+                        child: RecipeImageWidget(imageName: recipe.recipeURL),
+                    ),
                   ),
                   //Stars Field
                   Padding(

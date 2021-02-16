@@ -61,6 +61,7 @@ class _UploadPageState extends State<UploadPage> {
         body: ModalProgressHUD(
           inAsyncCall: showSpinner,
           child: Container(
+            height: double.infinity,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('images/default_recipe.jpeg'),
@@ -116,7 +117,10 @@ class _UploadPageState extends State<UploadPage> {
                                 controller: cookTimeTextController,
                                 keyboardType: TextInputType.numberWithOptions(signed: false, decimal: false),
                                 textAlign: TextAlign.center,
-                                decoration: kTextFieldDecoration.copyWith(hintText: 'Cooking Time'),
+                                decoration: kTextFieldDecoration.copyWith(
+                                    hintText: 'Cooking Time',
+                                  // errorText: (cookTimeTextController != '') ? "Can't be empty" : null
+                                ),
                                 onChanged: (cookTimeValue) {
                                   cookTime = int.parse(cookTimeValue);
                                 },
@@ -225,8 +229,20 @@ class _UploadPageState extends State<UploadPage> {
                             });
                             try {
                               if (_auth.currentUser != null) {
-                                await DataBaseService().uploadRecipe(dropdownValue, recipeName, ingredients, _image,
-                                    cookTime, recipeScore, recipeText);
+                                if (dropdownValue != 'Category' &&
+                                    recipeName != '' &&
+                                    ingredients != '' &&
+                                    _image != null &&
+                                    cookTime != 0 &&
+                                    recipeScore != 0 &&
+                                    recipeText != '') {
+                                  print('All filled');
+                                  // await DataBaseService().uploadRecipe(dropdownValue, recipeName, ingredients, _image,
+                                  //     cookTime, recipeScore, recipeText);
+                                } else {
+                                  print('Not every field filled');
+                                  DialogAlert(message: "Please don't leave any filed empty");
+                                }
                               }
                             }
                              catch (e) {

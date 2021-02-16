@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monday_cooks/components/future_builder_images.dart';
 import 'package:monday_cooks/database.dart';
 import '../database.dart';
 
@@ -24,6 +25,7 @@ class FoodScrollContainer extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Container(
+        width: MediaQuery.of(context).size.width * 0.9,
         height: 250,
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.all(10),
@@ -38,7 +40,9 @@ class FoodScrollContainer extends StatelessWidget {
                   margin: EdgeInsets.all(10),
                   padding: EdgeInsets.all(10),
                   width: 150,
-                  child: Column(
+                  child:
+                  //Recipe Name
+                  Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(recipeName,
@@ -48,6 +52,7 @@ class FoodScrollContainer extends StatelessWidget {
                               fontWeight: FontWeight.bold
                           ),),
                         SizedBox(height: 15),
+                        //Recipe Score
                         Center(
                           child:
                           Row(
@@ -65,6 +70,7 @@ class FoodScrollContainer extends StatelessWidget {
                               ]),
                         ),
                         SizedBox(height: 15),
+                        // CookTime Container
                         Container(
                           margin: EdgeInsets.all(10),
                           padding: EdgeInsets.all(10),
@@ -79,7 +85,6 @@ class FoodScrollContainer extends StatelessWidget {
                                   fontWeight: FontWeight.bold
                               )),
                         )
-
                       ])),
               //Right Side Picture
               GestureDetector(
@@ -87,41 +92,11 @@ class FoodScrollContainer extends StatelessWidget {
                 child: Material(
                   borderRadius: BorderRadius.circular(10.0),
                   child: Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.4, //200,
+                    width: MediaQuery.of(context).size.width * 0.4, //200,
                     height: 280,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: FutureBuilder(
-                        future: DataBaseService().getImage(context, imagePath),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            return Container(
-                              width: MediaQuery.of(context).size.width / 1.2,
-                              height: MediaQuery.of(context).size.width / 0.8,
-                              child: snapshot.data,
-                            );
-                          }
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Container(
-                              width: 100,
-                              height: 100,
-                              child: CircularProgressIndicator(
-                              ),
-                            );
-                          }
-                          return Container(
-                            child: Text('ERROR',
-                              style: TextStyle(
-                                  color: Colors.white
-                              ),),
-                          );
-                        },
-                      ),
+                      child: FutureBuilderImages(imagePath)
                     ),
                   ),
                 ),

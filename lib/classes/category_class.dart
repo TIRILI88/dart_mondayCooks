@@ -2,7 +2,8 @@
 class Category {
 
   String category;
+  bool isActive;
 
-  Category(this.category);
+  Category(this.category, this.isActive);
 
 }

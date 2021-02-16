@@ -95,7 +95,7 @@ class DataBaseService {
     final categoryData = await _firestore.collection('categories').get();
     List<Category> categoriesList = [];
     for(var category in categoryData.docs) {
-      Category categoryObj = Category(category['category']);
+      Category categoryObj = Category(category['category'], false);
       categoriesList.add(categoryObj);
     }
     categoriesList.sort((a, b) {return a.category.compareTo(b.category);});
@@ -127,10 +127,22 @@ class DataBaseService {
     }
   }
 
-  addToFavorites(document, userID) {
-    print('addToFavorites called. DocID: $document');
-    _firestore.collection('recipes').doc(document).update({
+  addToFavorites(document, userID) async {
+    await _firestore.collection('recipes').doc(document).update({
       'favorite': userID,
+    });
+    getRecipes();
+  }
+
+  Future editRecipe(context, docID, category, recipeName, imageURL, ingredients, cookTime, recipeScore, recipeText) async {
+    await _firestore.collection('recipes').doc(docID).update({
+      'category': 'All, $category',
+      'recipeName': recipeName,
+      'imageURL': imageURL,
+      'ingredients': ingredients,
+      'cookTime': cookTime,
+      'recipeScore': recipeScore,
+      'recipeText': recipeText,
     });
     getRecipes();
   }
