@@ -175,20 +175,24 @@ class _StartPageState extends State<StartPage> {
                   SizedBox(height: 20),
                   // Recipe Container Slider
                   Expanded(child:
-                  ListView.builder(
-                      itemCount: (recipes != null) ? filteredRecipes.length : 5,
-                      itemBuilder: (BuildContext context, int index){
-                        return FoodScrollContainer(
-                          recipeName: filteredRecipes[index].recipeName,
-                          scoreNumber: filteredRecipes[index].recipeScore,
-                          cookingTime: filteredRecipes[index].cookTime,
-                          imagePath: filteredRecipes[index].recipeURL,
-                          onTapNavigation: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => RecipePage(recipe: filteredRecipes[index])));
-                          },
-                        );
-                      }),
+                  MediaQuery.removePadding(
+                    context: context,
+                    removeTop: true,
+                    child: ListView.builder(
+                        itemCount: (recipes != null) ? filteredRecipes.length : 5,
+                        itemBuilder: (BuildContext context, int index){
+                          return FoodScrollContainer(
+                            recipeName: filteredRecipes[index].recipeName,
+                            scoreNumber: filteredRecipes[index].recipeScore,
+                            cookingTime: filteredRecipes[index].cookTime,
+                            imagePath: filteredRecipes[index].recipeURL,
+                            onTapNavigation: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => RecipePage(recipe: filteredRecipes[index])));
+                            },
+                          );
+                        }),
+                  ),
                     ),
                   ],
               ),

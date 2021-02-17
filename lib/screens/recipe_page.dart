@@ -79,19 +79,27 @@ class RecipePage extends StatelessWidget {
                         )
                     ),
                   ),
-                  SingleChildScrollView( ///TODO ListView for better read?
-                    scrollDirection: Axis.vertical,
-                    physics: ClampingScrollPhysics(),
-                    child: Container(
-                      margin: EdgeInsets.all(10.0),
-                      padding: EdgeInsets.all(15.0),
-                      decoration: BoxDecoration(
+                  Container(
+                    margin: EdgeInsets.all(10.0),
+                    padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+                    decoration: BoxDecoration(
                         color: Color(0xFF363636),
                         borderRadius: BorderRadius.all(Radius.circular(20.0))
-                      ),
-                      height: MediaQuery.of(context).size.width * 0.9,
-                        width: MediaQuery.of(context).size.width * 0.9,
-                        child: Text(recipe.recipeText)),
+                    ),
+                    height: MediaQuery.of(context).size.width * 0.68,
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    child: Expanded(
+                      child: ListView(
+                        padding: EdgeInsets.only(bottom: 20.0, top: 5.0),
+                        shrinkWrap: true,
+                        children: [
+                          SingleChildScrollView( ///TODO ListView for better read?
+                          scrollDirection: Axis.vertical,
+                          // physics: ClampingScrollPhysics(),
+                          child: Text(recipe.recipeText),
+                        ),
+                      ]),
+                    ),
                   )
                 ]),
               /* /// TODO Decision - ListView above - Second SlidingPanel underneath
