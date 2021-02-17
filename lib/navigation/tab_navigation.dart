@@ -26,12 +26,12 @@ class TabNavigationItem {
         title: 'Home',
         icon: Icon(FontAwesomeIcons.home)),
     TabNavigationItem(
-        page: (FirebaseAuth.instance.currentUser != null) ? UploadPage() : UserLogin(),
+        page: (FirebaseAuth.instance.currentUser != null) ? UploadPage(): UserLogin(),
         title: 'Add Recipe',
         icon: Icon(FontAwesomeIcons.plusCircle)),
     TabNavigationItem(
         page: (FirebaseAuth.instance.currentUser != null) ? UserPage() : UserLogin(),
-        title: 'Me',
+        title: 'User',
         icon: Icon(FontAwesomeIcons.userCircle)),
   ];
 

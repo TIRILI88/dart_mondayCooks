@@ -16,7 +16,6 @@ class UserLogin extends StatefulWidget {
 
 class _UserLoginState extends State<UserLogin> {
 
-  final _firestore = FirebaseStorage.instance;
   final _auth = FirebaseAuth.instance;
   bool showSpinner = false;
   String name;
@@ -25,138 +24,171 @@ class _UserLoginState extends State<UserLogin> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ModalProgressHUD(
-        inAsyncCall: showSpinner,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      fit: BoxFit.cover, image: AssetImage('images/default_recipe.jpeg')),
-                  color: Colors.orange,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if(!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+          FocusManager.instance.primaryFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        body: ModalProgressHUD(
+          inAsyncCall: showSpinner,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.cover, image: AssetImage('images/default_recipe.jpeg')),
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
                 ),
               ),
-            ),
-            Container(
-              // borderRadius: BorderRadius.all(Radius.circular(15.0)),
-              color: Color(0xFF363636).withOpacity(0.9),
-              // minHeight: 200.0,
-              child: Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    TextField(
-                        keyboardType: TextInputType.name,
-                        textAlign: TextAlign.center,
-                        onChanged: (value) {
-                          name = value;
-                          //Do something with the user input.
-                        },
-                        decoration: kTextFieldDecoration.copyWith(hintText: 'Please give me your firstname')
-                    ),
-                    SizedBox(
-                      height: 8.0,
-                    ),
-                    TextField(
-                        keyboardType: TextInputType.emailAddress,
-                        textAlign: TextAlign.center,
-                        onChanged: (value) {
-                          email = value;
-                          //Do something with the user input.
-                        },
-                        decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your email address')
-                    ),
-                    SizedBox(
-                      height: 8.0,
-                    ),
-                    TextField(
-                        obscureText: true,
-                        textAlign: TextAlign.center,
-                        onChanged: (value) {
-                          password = value;
-                          //Do something with the user input.
-                        },
-                        decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your password.')
-                    ),
-                    SizedBox(
-                      height: 24.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        RoundedButton(
-                            text: 'Log In',
-                            color: Colors.orangeAccent,
-                            onPressed: () async {
-                              if(this.mounted) {
-                                setState(() {
-                                  showSpinner = true;
-                                });
-                              }
-                              try {
-                                final user = await _auth.signInWithEmailAndPassword(
-                                    email: email, password: password);
-                                if (user != null) {
-                                  DataBaseService().getCurrentUser();
-                                  Navigator.of(context).pushNamedAndRemoveUntil('/tabsPage', (Route<dynamic> route) => false);
+              Container(
+                // borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                color: Color(0xFF363636).withOpacity(0.9),
+                // minHeight: 200.0,
+                child: Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      TextField(
+                          keyboardType: TextInputType.name,
+                          textCapitalization: TextCapitalization.words,
+                          textAlign: TextAlign.center,
+                          onChanged: (value) {
+                            name = value;
+                          },
+                          decoration: kTextFieldDecoration.copyWith(hintText: 'Please give me your firstname')
+                      ),
+                      SizedBox(
+                        height: 8.0,
+                      ),
+                      TextField(
+                          keyboardType: TextInputType.emailAddress,
+                          textAlign: TextAlign.center,
+                          onChanged: (value) {
+                            email = value;
+                          },
+                          decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your email address')
+                      ),
+                      SizedBox(
+                        height: 8.0,
+                      ),
+                      TextField(
+                          obscureText: true,
+                          textAlign: TextAlign.center,
+                          onChanged: (value) {
+                            password = value;
+                          },
+                          decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your password.')
+                      ),
+                      SizedBox(
+                        height: 24.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          RoundedButton(
+                              text: 'Log In',
+                              color: Colors.orangeAccent,
+                              onPressed: () async {
+                                if(this.mounted) {
+                                  setState(() {
+                                    showSpinner = true;
+                                  });
                                 }
-                              }
-                              catch (e) {
-                                DialogAlert(message: e.toString());
-                              }
-                              if(this.mounted) {
-                                setState(() {
-                                  showSpinner = false;
-                                });
-                              }
-                            }),
-                        // SizedBox(
-                        //   width: .0,
-                        // ),
-                        RoundedButton(
-                            text: 'Sign Up',
-                            color: Colors.orangeAccent,
-                            onPressed: () async {
-                              if(this.mounted) {
-                                setState(() {
-                                  showSpinner = true;
-                                });
-                              }
-                              try {
-                                final user = await _auth.createUserWithEmailAndPassword(
-                                    email: email, password: password);
-                                if (user != null) {
-                                  await DataBaseService().userName(name);
-                                  await DataBaseService().getCurrentUser();
-                                  Navigator.of(context).pushNamedAndRemoveUntil('/tabsPage', (Route<dynamic> route) => false);
+                                if (name != '' && email != '' && password != '') {
+                                  try {
+                                    final user = await _auth.signInWithEmailAndPassword(
+                                        email: email, password: password);
+                                    if (user != null) {
+                                      DataBaseService().getCurrentUser();
+                                      Navigator.of(context).pushNamedAndRemoveUntil('/tabsPage', (Route<dynamic> route) => false);
+                                    }
+                                  }
+                                  catch (e) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return DialogAlert(title: 'Something went wrong', message: e.toString());
+                                        }
+                                    );
+                                  }
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return DialogAlert(title: 'Not Enough Information', message: 'Please fill all fields');
+                                      }
+                                  );
                                 }
-                              }
-                              catch (e) {
-                                DialogAlert(message: e.toString());
-                              }
-                              if(this.mounted) {
-                                setState(() {
-                                  showSpinner = false;
-                                });
-                              }
-                            }),
-                      ],
-                    ),
-                    SizedBox(height: 10,)
-                  ]
+                                if(this.mounted) {
+                                  setState(() {
+                                    showSpinner = false;
+                                  });
+                                }
+                              }),
+                          RoundedButton(
+                              text: 'Sign Up',
+                              color: Colors.orangeAccent,
+                              onPressed: () async {
+                                if(this.mounted) {
+                                  setState(() {
+                                    showSpinner = true;
+                                  });
+                                }
+                                if (name != '' && email != '' && password != '') {
+                                  try {
+                                    final user = await _auth.createUserWithEmailAndPassword(
+                                        email: email, password: password);
+                                    if (user != null) {
+                                      await DataBaseService().userName(name);
+                                      await DataBaseService().getCurrentUser();
+                                      Navigator.of(context).pushNamedAndRemoveUntil('/tabsPage', (Route<dynamic> route) => false);
+                                    }
+                                  }
+                                  catch (e) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return DialogAlert(title: 'Something went wrong', message: e.toString());
+                                        }
+                                    );
+                                  }
+                                } else {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return DialogAlert(title: 'Not Enough Information', message: 'Please fill all required fields');
+                                      }
+                                  );
+                                }
+
+
+                                if(this.mounted) {
+                                  setState(() {
+                                    showSpinner = false;
+                                  });
+                                }
+                              }),
+                        ],
+                      ),
+                      SizedBox(height: 10,)
+                    ]
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -146,6 +146,7 @@ class _UploadPageState extends State<UploadPage> {
                         padding: EdgeInsets.all(10.0),
                         child: TextField(
                           controller: recipeTextController,
+                          textCapitalization: TextCapitalization.words,
                           textAlign: TextAlign.center,
                           decoration: kTextFieldDecoration.copyWith(hintText: 'Recipe Name'),
                           onChanged: (recipeValue) {
@@ -158,6 +159,7 @@ class _UploadPageState extends State<UploadPage> {
                         padding: EdgeInsets.all(10.0),
                         child: TextField(
                           controller: ingredientTextController,
+                          textCapitalization: TextCapitalization.words,
                           textAlign: TextAlign.center,
                           decoration: kTextFieldDecoration.copyWith(hintText: 'Ingredients'),
                           onChanged: (ingredientValue) {
@@ -179,6 +181,7 @@ class _UploadPageState extends State<UploadPage> {
                             child: TextField(
                               maxLines: 10,
                               textAlign: TextAlign.left,
+                              textCapitalization: TextCapitalization.sentences,
                               decoration: InputDecoration(
                                 hintText: 'Recipe Steps',
                                 border: InputBorder.none,
@@ -229,24 +232,27 @@ class _UploadPageState extends State<UploadPage> {
                             });
                             try {
                               if (_auth.currentUser != null) {
-                                if (dropdownValue != 'Category' &&
-                                    recipeName != '' &&
-                                    ingredients != '' &&
-                                    _image != null &&
-                                    cookTime != 0 &&
-                                    recipeScore != 0 &&
-                                    recipeText != '') {
-                                  print('All filled');
-                                  // await DataBaseService().uploadRecipe(dropdownValue, recipeName, ingredients, _image,
-                                  //     cookTime, recipeScore, recipeText);
+                                if (dropdownValue != 'Category' && recipeName != '' && ingredients != '' && _image != null &&
+                                    cookTime != 0 && recipeScore != 0 && recipeText != '') {
+                                  await DataBaseService().uploadRecipe(dropdownValue, recipeName, ingredients, _image,
+                                      cookTime, recipeScore, recipeText);
                                 } else {
-                                  print('Not every field filled');
-                                  DialogAlert(message: "Please don't leave any filed empty");
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return DialogAlert(title: 'Not enough Information', message: 'Please fill all fields.');
+                                    }
+                                  );
                                 }
                               }
                             }
                              catch (e) {
-                              DialogAlert(message: e.toString());
+                              showDialog(
+                                context: context,
+                                  builder: (BuildContext context) {
+                                    return DialogAlert(title: 'Something went wrong', message: e.toString());
+                                  }
+                              );
                             }
                             categoryTextController.clear();
                             recipeTextController.clear();

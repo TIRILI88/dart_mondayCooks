@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monday_cooks/components/future_builder_images.dart';
-import 'package:monday_cooks/database.dart';
-import '../database.dart';
+
 
 class FoodScrollContainer extends StatelessWidget {
   FoodScrollContainer(

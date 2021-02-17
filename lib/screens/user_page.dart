@@ -7,8 +7,7 @@ import 'package:monday_cooks/constants.dart';
 import 'package:monday_cooks/classes/user_data_class.dart';
 import 'package:monday_cooks/database.dart';
 import 'package:monday_cooks/classes/recipe_class.dart';
-import 'package:monday_cooks/screens/test_recipe_page.dart';
-
+import 'package:monday_cooks/screens/recipe_page.dart';
 
 class UserPage extends StatefulWidget {
   @override
@@ -16,25 +15,68 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-
   final _auth = FirebaseAuth.instance;
   List<UserData> user = [UserData(userName: 'Test', userID: '')];
-  List<Recipe> recipes = [Recipe('Burger', 'images/default_recipe.jpeg', 5.5, 25, 'Main Dish', 'Recipe Text here', '1999-01-01 00:01:00.000000', ['Tomato', 'Meat', 'Bread'], '5mjTOzKjEfeYSk9Fz3NV030WpTo2', '', '')];
-  List<Recipe> userRecipes = [Recipe('Burger', 'images/default_recipe.jpeg', 5.5, 25, 'Main Dish', 'Recipe Text here', '1999-01-01 00:01:00.000000', ['Tomato', 'Meat', 'Bread'], '5mjTOzKjEfeYSk9Fz3NV030WpTo2', '', '')];
-  List<Recipe> favoriteRecipes = [Recipe('Burger', 'images/default_recipe.jpeg', 5.5, 25, 'Main Dish', 'Recipe Text here', '1999-01-01 00:01:00.000000', ['Tomato', 'Meat', 'Bread'], '5mjTOzKjEfeYSk9Fz3NV030WpTo2', '', '')];
-
+  List<Recipe> recipes = [
+    Recipe(
+        'Burger',
+        'images/default_recipe.jpeg',
+        5.5,
+        25,
+        'Main Dish',
+        'Recipe Text here',
+        '1999-01-01 00:01:00.000000',
+        ['Tomato', 'Meat', 'Bread'],
+        '5mjTOzKjEfeYSk9Fz3NV030WpTo2',
+        '',
+        '')
+  ];
+  List<Recipe> userRecipes = [
+    Recipe(
+        'Burger',
+        'images/default_recipe.jpeg',
+        5.5,
+        25,
+        'Main Dish',
+        'Recipe Text here',
+        '1999-01-01 00:01:00.000000',
+        ['Tomato', 'Meat', 'Bread'],
+        '5mjTOzKjEfeYSk9Fz3NV030WpTo2',
+        '',
+        '')
+  ];
+  List<Recipe> favoriteRecipes = [
+    Recipe(
+        'Burger',
+        'images/default_recipe.jpeg',
+        5.5,
+        25,
+        'Main Dish',
+        'Recipe Text here',
+        '1999-01-01 00:01:00.000000',
+        ['Tomato', 'Meat', 'Bread'],
+        '5mjTOzKjEfeYSk9Fz3NV030WpTo2',
+        '',
+        '')
+  ];
 
   @override
   void initState() {
     super.initState();
     DataBaseService().getCurrentUser().then((userFromServer) {
-      setState(() {user = userFromServer;});
+      setState(() {
+        user = userFromServer;
+      });
     });
     DataBaseService().getRecipes().then((recipesFromServer) {
       setState(() {
         recipes = recipesFromServer;
-        userRecipes = recipes.where((r) => r.userID.contains(_auth.currentUser.uid)).toList();
-        favoriteRecipes = recipes.where((r) => r.favorite.contains(_auth.currentUser.uid)).toList();
+        userRecipes = recipes
+            .where((r) => r.userID.contains(_auth.currentUser.uid))
+            .toList();
+        favoriteRecipes = recipes
+            .where((r) => r.favorite.contains(_auth.currentUser.uid))
+            .toList();
       });
     });
   }
@@ -43,103 +85,110 @@ class _UserPageState extends State<UserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: [
-            Column(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Stack(children: [
+          Column(children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 20.0, horizontal: 15.0),
+                child: Text(
+                  'Your Recipes, ${user[0].userName} ', //
+                  style: kWelcomeTextField.copyWith(fontSize: 22),
+                ),
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  primary: Colors.orangeAccent,
+                ),
+                child: Icon(FontAwesomeIcons.signOutAlt),
+                onPressed: () {
+                  _auth.signOut();
+                  Navigator.pushNamed(context, '/tabsPage');
+                },
+              )
+            ]),
+            Container(
+              height: 150,
+              child: userRecipes.length == 0
+              ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0),
-                    child: Text('Your Recipes, ${user[0].userName} ', //
-                    style: kWelcomeTextField.copyWith(fontSize: 22),),
-                  ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      primary: Colors.orangeAccent,
-                    ),
-                      child: Icon(FontAwesomeIcons.signOutAlt),
-                      onPressed: () {
-                        _auth.signOut();
-                        Navigator.pushNamed(context, '/tabsPage');
-                      },
-                  )]),
-              Container(
-                height: 150,
-                  child: ListView.builder(
-                    padding: EdgeInsets.all(10.0),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: (recipes != null) ? userRecipes.length : 1,
-                      itemBuilder: (BuildContext context, int index) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => TestRecipePage(recipe: userRecipes[index])));
-                          },
-                          child: Container(
-                            width: 200,
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0)
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20.0),
-                                  child: FutureBuilderImages(userRecipes[index].recipeURL)
-                              )
-                              /*
-                              Padding(
-                                padding: EdgeInsets.all(10.0),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    // -- Left Side
-                                    Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(userRecipes[index].recipeName,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey,
-                                      ),),
-                                      SizedBox(height: 5.0,),
-                                      Text(userRecipes[index].recipeScore.toString(),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.grey,
-                                        ))]),
-                                    // -- Right Side
-                                    // Flexible(
-                                    //   child: Container(
-                                    //     height: 80,
-                                    //     width: 80,
-                                    //     child: FutureBuilderImages(userRecipes[index].recipeURL),
-                                    //   ),
-                                    // )
-                                ]),
-                              ),
-                              */
-                            ),
+                  Expanded(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: kColorContainer,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(
+                        child: Text('Nothing here yet',
+                          style: TextStyle(
+                            fontSize: 20
                           ),
-                        );
-                      }
-              ),
-              ),
-              SizedBox(height: 30),
-              Expanded(
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+              : ListView.builder(
+                  padding: EdgeInsets.all(10.0),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: (recipes != null) ? userRecipes.length : 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => RecipePage(
+                                          recipe: userRecipes[index])));
+                            },
+                            child: Container(
+                              width: 200,
+                              child: Card(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20.0)),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: FutureBuilderImages(
+                                          userRecipes[index].recipeURL))),
+                            ),
+                       );
+                  }),
+            ),
+            SizedBox(height: 30),
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
-                    child: Text('Your Favorites',
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 15.0),
+                    child: Text(
+                      'Your Favorites',
                       style: kWelcomeTextField.copyWith(fontSize: 22),
                     ),
                   ),
                   Expanded(
-                    child: ListView.builder(
-                      scrollDirection: Axis.vertical,
+                    child: favoriteRecipes.length == 0
+                        ? Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: 250,
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: Color(0xFF363636),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Center(child: Text('Nothing here yet',
+                      style: TextStyle(
+                        fontSize: 20
+                      ),)),
+                    )
+                    : ListView.builder(
+                        scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         itemCount: favoriteRecipes.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -148,20 +197,22 @@ class _UserPageState extends State<UserPage> {
                             scoreNumber: favoriteRecipes[index].recipeScore,
                             cookingTime: favoriteRecipes[index].cookTime,
                             imagePath: favoriteRecipes[index].recipeURL,
-                              onTapNavigation: () {
-                                Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) => TestRecipePage(recipe: favoriteRecipes[index])));
-                              },
+                            onTapNavigation: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => RecipePage(
+                                          recipe: favoriteRecipes[index])));
+                            },
                           );
-                        }
-                    ),
+                        }),
                   )
                 ],
               ),
-                ),
-            ])
-          ] //
-        ),
+            ),
+          ])
+        ] //
+            ),
       ),
     );
   }

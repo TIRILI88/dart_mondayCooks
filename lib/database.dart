@@ -136,7 +136,7 @@ class DataBaseService {
 
   Future editRecipe(context, docID, category, recipeName, imageURL, ingredients, cookTime, recipeScore, recipeText) async {
     await _firestore.collection('recipes').doc(docID).update({
-      'category': 'All, $category',
+      'category': category,
       'recipeName': recipeName,
       'imageURL': imageURL,
       'ingredients': ingredients,
